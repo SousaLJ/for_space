@@ -28,7 +28,6 @@ options_button = button.Button(603, 408, options_img, 0.8)
 credits_button = button.Button(758, 357, credits_img, 0.8)
 
 running = True
-game_paused = True
 
 game_state = 'menu'
 
@@ -62,8 +61,11 @@ while running:
         if credits_button.draw(display):
             game_state = 'menu_credits'
 
-    if game_state == 'playing':
+    elif game_state == 'playing':
         display.blit(ingame_background, (0, 0))
+
+    else:
+        pass
 
     
     pygame.display.update()

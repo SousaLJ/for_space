@@ -1,0 +1,3 @@
+*.pyc
+.vs/
+__pycache__

@@ -8,7 +8,7 @@ pygame.init()
 pygame.display.set_caption("for_invaders")
 pygame.display.set_icon(pygame.image.load(join("images", "logo.png")))
 
-LARGURA_TELA = 1080
+LARGURA_TELA = 1280
 ALTURA_TELA = 720
 display = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA), pygame.SCALED | pygame.RESIZABLE)
 
@@ -22,10 +22,10 @@ options_img = pygame.image.load(join('images', 'buttons', 'options.png')).conver
 scoreboard_img = pygame.image.load(join('images', 'buttons', 'scoreboard.png')).convert_alpha()
 credits_img = pygame.image.load(join('images', 'buttons', 'credits.png')).convert_alpha()
 
-play_button = button.Button(221, 366, play_img, 0.8)
-scoreboard_button = button.Button(376, 413, scoreboard_img, 0.8)
-options_button = button.Button(603, 408, options_img, 0.8)
-credits_button = button.Button(758, 357, credits_img, 0.8)
+play_button = button.Button(261.93, 335.39, play_img, 0.8)
+scoreboard_button = button.Button(445.63, 382.39, scoreboard_img, 0.8)
+options_button = button.Button(714.67, 377.39, options_img, 0.8)
+credits_button = button.Button(898.37, 329.39, credits_img, 0.8)
 
 running = True
 
@@ -46,7 +46,7 @@ while running:
 
     # background atual será definido apos condição
     if game_state == 'menu':
-        display.blit(menu_background, (180,0))
+        display.blit(menu_background, (0,0))
 
         if scoreboard_button.draw(display):
             game_state = 'menu_scoreboard'

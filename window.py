@@ -49,7 +49,7 @@ while running:
 
     # background atual será definido apos condição
     if game_state == 'menu':
-        display.blit(menu_background, (0,0))
+        display.blit(menu_background, (280,0))
 
         if scoreboard_button.draw(display):
             game_state = 'menu_scoreboard'

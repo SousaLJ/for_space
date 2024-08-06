@@ -24,12 +24,10 @@ class Button():
 
             surface.blit(hovered_image, zoomed_rect.topleft)
 
-            # Detecta o clique
             if pygame.mouse.get_pressed()[0] == 1 and not self.clicked:
                 self.clicked = True
                 action = True
         else:
-            # Desenha a imagem normal
             surface.blit(self.image, self.rect.topleft)
 
         if pygame.mouse.get_pressed()[0] == 0:

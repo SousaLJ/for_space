@@ -18,26 +18,16 @@ ingame_background = pygame.image.load(join('images', 'universo.png'))
 credits_background = pygame.image.load(join('images', 'credits_bg.png'))
 game_over_background = pygame.image.load(join('images', 'game_over_screen_sem_botoes.png'))
 
-# Botões
-play_img = pygame.image.load(join('images', 'buttons', 'play.png')).convert_alpha()
-options_img = pygame.image.load(join('images', 'buttons', 'options.png')).convert_alpha()
-scoreboard_img = pygame.image.load(join('images', 'buttons', 'scoreboard.png')).convert_alpha()
-credits_img = pygame.image.load(join('images', 'buttons', 'credits.png')).convert_alpha()
-btm_img = pygame.image.load(join('images', 'buttons','btm_img.png')).convert_alpha()
-play_again_game_over_img = pygame.image.load(join('images', 'buttons','play_again.png')).convert_alpha()
-back_to_menu_game_over_img = pygame.image.load(join('images', 'buttons','back_to_menu.png')).convert_alpha()
-scoreboard_game_over_img = pygame.image.load(join('images', 'buttons','scoreboard_game_over.png')).convert_alpha()
-exit_game_game_over_img = pygame.image.load(join('images', 'buttons','exit_game.png')).convert_alpha()
-
-play_button = button.Button(261.93, 335.39, play_img, 0.8)
-scoreboard_button = button.Button(445.63, 382.39, scoreboard_img, 0.8)
-options_button = button.Button(714.67, 377.39, options_img, 0.8)
-credits_button = button.Button(898.37, 329.39, credits_img, 0.8)
-btm_button = button.Button(20, 20, btm_img, 1)
-play_again_game_over_button = button.Button(410, 370, play_again_game_over_img, 1)
-back_to_menu_game_over_button = button.Button(330, 295, back_to_menu_game_over_img, 1)
-scoreboard_game_over_button = button.Button(740, 290, scoreboard_game_over_img, 1)
-exit_game_game_over_button = button.Button(652, 370, exit_game_game_over_img, 1)
+# Instanciando botão
+play_button = button.Button('play.png', 261.93, 335.39, 0.8)
+scoreboard_button = button.Button('scoreboard.png', 445.63, 382.39, 0.8)
+options_button = button.Button('options.png', 714.67, 377.39, 0.8)
+credits_button = button.Button('credits.png', 898.37, 329.39, 0.8)
+btm_button = button.Button('btm_img.png', 20, 20, 1)
+play_again_game_over_button = button.Button('play_again.png', 410, 370, 1)
+back_to_menu_game_over_button = button.Button('back_to_menu.png', 330, 295, 1)
+scoreboard_game_over_button = button.Button('scoreboard_game_over.png', 740, 290, 1)
+exit_game_game_over_button = button.Button('exit_game.png', 652, 370, 1)
 
 running = True
 

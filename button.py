@@ -1,10 +1,12 @@
 import pygame
+from os.path import join
 
 class Button():
-    def __init__(self, x, y, image, scale):
-        width = image.get_width()
-        height = image.get_height()
-        self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
+    def __init__(self, nome_arquivo, x, y, scale=1):
+        self.image = pygame.image.load(join('images', 'buttons', nome_arquivo)).convert_alpha()
+        width = self.image.get_width()
+        height = self.image.get_height()
+        self.image = pygame.transform.scale(self.image, (int(width * scale), int(height * scale)))
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
         self.clicked = False

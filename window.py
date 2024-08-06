@@ -53,15 +53,20 @@ while running:
         if scoreboard_button.draw(display):
             game_state = 'menu_scoreboard'
 
-        if options_button.draw(display):
+        elif options_button.draw(display):
             game_state = 'menu_options'
 
-        if play_button.draw(display):
+        elif play_button.draw(display):
             print('clicked')
             game_state = 'playing'
 
-        if credits_button.draw(display):
+        elif credits_button.draw(display):
             game_state = 'menu_credits'
+
+    elif game_state == 'menu_scoreboard':
+        if btm_button.draw(display):
+            game_state = 'menu'
+        
 
     elif game_state == 'playing':
         #display.blit(ingame_background, (0, 0)) Comentado com o propósito de testar a tela de fim de jogo

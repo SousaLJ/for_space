@@ -21,7 +21,7 @@ class Button():
             # Tive que pegar os valores novos de largura (referentes a imagem já redimensionada pela função scale)
             width = self.image.get_width()
             height = self.image.get_height()
-            hovered_image = pygame.transform.scale(self.image, (int(width * self.zoom_scale), int(height * self.zoom_scale)))
+            hovered_image = pygame.transform.smoothscale(self.image, (int(width * self.zoom_scale), int(height * self.zoom_scale)))
             zoomed_rect = hovered_image.get_rect(center=self.rect.center)
 
             surface.blit(hovered_image, zoomed_rect.topleft)

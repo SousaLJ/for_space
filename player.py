@@ -2,6 +2,7 @@ import pygame
 from os.path import join
 from utils import surface_load
 from pygame.sprite import Sprite
+# from window import LARGURA_TELA
 
 
 class Player(Sprite):
@@ -22,10 +23,12 @@ class Player(Sprite):
     # self.direcao = self.direcao.normalize() if self.direcao else self.direcao
   
     self.rect.center += self.direcao * self.speed
-      
+    if self.rect.left <= 0:
+      self.rect.left = 0
     
-  def draw(self, display):
-    display.blit(self.image, self.rect)
+    if self.rect.right >= 1280:
+      self.rect.right = 1280
+    
     
   # def fire(self):
   #   current_time = time.time()

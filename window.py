@@ -1,51 +1,13 @@
 from typing import Any
 import pygame
 import button
-import random
 from player import Player
+from invaders import Invaders
 from sys import exit
 from os.path import join
 
-class Invaders(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__()
-
-        invader_type = random.randint(0,1)
-        if invader_type == 0:
-            frame1_invader0 = pygame.image.load(join('images', 'frame1_invader0.png')).convert_alpha()
-            frame2_invader0 = pygame.image.load(join('images', 'frame2_invader0.png')).convert_alpha()
-            self.frames = [frame1_invader0, frame2_invader0]
-            self.x = x
-            self.y = y
-
-        else:
-            frame1_invader0 = pygame.image.load(join('images', 'frame1_invader0.png')).convert_alpha()
-            frame2_invader0 = pygame.image.load(join('images', 'frame2_invader0.png')).convert_alpha()
-            self.frames = [frame1_invader0, frame2_invader0]
-            self.x = x
-            self.y = y
-
-        self.animation_index = 0
-        self.image = self.frames[self.animation_index]
-        self.rect = self.image.get_rect()
-        self.rect.center = [x, y]
-        self.direction = 1
-
-    def animation_state(self):
-        self.animation_index += 0.02
-        if self.animation_index >= len(self.frames): 
-            self.animation_index = 0
-        self.image = self.frames[int(self.animation_index)]
-
-    def update(self):
-        self.animation_state()
-        self.rect.x += self.direction
-
 
 pygame.init()
-
-clock = pygame.time.Clock()
-fps = 60
 
 pygame.display.set_caption("for_space")
 pygame.display.set_icon(pygame.image.load(join("images", "logo.png")))
@@ -97,6 +59,9 @@ def check_invader_position():
             invader.direction *= -1
             invader.rect.y += 10
 
+# Player
+player_sprite = pygame.sprite.GroupSingle()
+player = Player(ALTURA_TELA // 2, LARGURA_TELA // 2, player_sprite)
 
 running = True
 clock = pygame.time.Clock()
@@ -104,14 +69,11 @@ clock = pygame.time.Clock()
 game_state = 'menu'
 previous_game_state = game_state
 
-player_sprite = pygame.sprite.GroupSingle()
-player = Player(ALTURA_TELA // 2, LARGURA_TELA // 2, player_sprite)
 
 pause_screen = False
 
 while running:
     clock.tick(60)
-    clock.tick(fps)
     # fundo com a cor da for_code
     display.fill("#1E1647")
     # enquanto o jogo esta rodando procuramos por eventos
@@ -154,9 +116,6 @@ while running:
         invader_group.update()
         invader_group.draw(display)
         check_invader_position()
-
-
-        display.blit(ingame_background, (0, 0))
         
         player_sprite.update()
         player_sprite.draw(display)

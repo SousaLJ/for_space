@@ -23,6 +23,7 @@ menu_background = pygame.image.load(join('images', 'background_menu_atualizado.p
 ingame_background = pygame.image.load(join('images', 'universo.png'))
 credits_background = pygame.image.load(join('images', 'credits_bg.png'))
 game_over_background = pygame.image.load(join('images', 'game_over_screen_sem_botoes.png'))
+score_board_background = pygame.image.load(join('images', 'score_board.png'))
 
 # Instanciando botão
 play_button = button.Button('play_button.png', 72.0, 402.7, 1)
@@ -107,6 +108,7 @@ while running:
             game_state = 'menu_credits'
 
     elif game_state == 'menu_scoreboard' or game_state == 'menu_options':
+        display.blit(score_board_background, (0, 0))
         if back_to_menu_button.draw(display):
             game_state = 'menu'
         

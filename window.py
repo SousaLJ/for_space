@@ -1,75 +1,22 @@
-from typing import Any
 import pygame
-import button
 from player import Player
-from invaders import Invaders
+from invaders import *
 from sys import exit
 from os.path import join
-
+from config import *
 
 pygame.init()
 
-pygame.display.set_caption("for_space")
-pygame.display.set_icon(pygame.image.load(join("images", "logo.png")))
-
-LARGURA_TELA = 1280
-ALTURA_TELA = 720
-display = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA), pygame.SCALED | pygame.RESIZABLE)
-rows = 5
-cols = 13
-
-# Telas
-menu_background = pygame.image.load(join('images', 'background_menu_atualizado.png'))
-ingame_background = pygame.image.load(join('images', 'universo.png'))
-credits_background = pygame.image.load(join('images', 'credits_bg.png'))
-game_over_background = pygame.image.load(join('images', 'game_over_screen_sem_botoes.png'))
-score_board_background = pygame.image.load(join('images', 'score_board.png'))
-
-# Instanciando botão
-play_button = button.Button('play_button.png', 72.0, 402.7, 1)
-scoreboard_button = button.Button('scoreboard_button.png', 255.8, 487.1, 1)
-options_button = button.Button('options_button.png', 849.4, 487.1, 1)
-credits_button = button.Button('credits_button.png', 1033, 402.7, 1)
-back_to_menu_button = button.Button('back_to_menu_button.png', 20, 20, 1)
-play_again_game_over_button = button.Button('play_again_button.png', 410, 370, 1)
-scoreboard_game_over_button = button.Button('scoreboard_button.png', 720, 293, 1.1)
-exit_game_game_over_button = button.Button('exit_game_button.png', 652, 370, 1)
-back_to_menu_game_over_button = button.Button('back_to_menu_button.png', 330, 295, 1)
-
-# invaders
-invader_group = pygame.sprite.Group()
-            
-def create_invaders():
-    for row in range(rows):
-        for item in range(cols):
-            invader = Invaders(100 + item * 65, 50 + row * 70)
-            invader_group.add(invader)
-
+# Invaders   
 create_invaders()
-
-def check_invader_position():
-    change_direction = False
-    all_invaders = invader_group.sprites()
-    for invader in all_invaders:
-        if invader.rect.right >= LARGURA_TELA or invader.rect.left <= 0:
-            change_direction = True
-            break
-
-    if change_direction:
-        for invader in all_invaders:
-            invader.direction *= -1
-            invader.rect.y += 10
-
 # Player
-player_sprite = pygame.sprite.GroupSingle()
-player = Player(ALTURA_TELA // 2, LARGURA_TELA // 2, player_sprite)
+player = Player((ALTURA_TELA / 2, LARGURA_TELA / 2), player_sprite)
 
 running = True
 clock = pygame.time.Clock()
 
 game_state = 'menu'
 previous_game_state = game_state
-
 
 pause_screen = False
 
@@ -84,10 +31,22 @@ while running:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+        # esc retorna ao game_state antigo
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and game_state != 'playing':
             game_state = previous_game_state
+        
+        # esc in-game pausa o jogo e so despausa ao apertar esc novamente
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and not pause_screen and game_state == 'playing':
+            print("pause")
+            pause_screen = True
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and pause_screen and game_state == 'playing':
+            print("saindo do pause")
+            pause_screen = False
             
-    # background atual será definido apos condição
+        # increase fire rate test
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_0 and game_state == 'playing':
+            player.cooldown = 100
+            
     if game_state == 'menu':
         display.blit(menu_background, (0,0))
 
@@ -107,28 +66,24 @@ while running:
             previous_game_state = game_state
             game_state = 'menu_credits'
 
-    elif game_state == 'menu_scoreboard' or game_state == 'menu_options':
+    elif game_state == 'menu_scoreboard':
         display.blit(score_board_background, (0, 0))
         if back_to_menu_button.draw(display):
             game_state = 'menu'
-        
+            
+    elif game_state == 'menu_options':
+        if back_to_menu_button.draw(display):
+            game_state = 'menu'
+
 
     elif game_state == 'playing':
-        display.blit(ingame_background, (0, 0)) # Comentado com o propósito de testar a tela de fim de jogo
+        display.blit(ingame_background, (0, 0))
         invader_group.update()
         invader_group.draw(display)
         check_invader_position()
         
         player_sprite.update()
         player_sprite.draw(display)
-        
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and not pause_screen:
-            pause_screen = True
-            # Pause_Screen()
-            print("PAUSE SCREEN")
-    
-        if event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE:
-            pause_screen = False
         
         # if colisao:
         #   game_state = 'game_over'

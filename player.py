@@ -2,7 +2,6 @@ import pygame
 from os.path import join
 from utils import surface_load
 from pygame.sprite import Sprite
-# from window import LARGURA_TELA
 
 
 class Player(Sprite):

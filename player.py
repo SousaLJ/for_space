@@ -5,6 +5,10 @@ from pygame.sprite import Sprite
 from config import *
 from fire import Fire
 
+def create_player():
+  player = Player((ALTURA_TELA / 2, LARGURA_TELA / 2), player_sprite)
+  player_sprite.add(player)
+  
 class Player(Sprite):
   def __init__(self, pos, groups):
     super().__init__(groups)

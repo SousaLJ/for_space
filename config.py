@@ -28,6 +28,12 @@ scoreboard_game_over_button = Button('scoreboard_button.png', 720, 293, 1.1)
 exit_game_game_over_button = Button('exit_game_button.png', 652, 370, 1)
 back_to_menu_game_over_button = Button('back_to_menu_button.png', 330, 295, 1)
 
+# Pause Screen button (ps)
+ps_play_button = Button('play_button.png', 520, 200, 0.8)
+ps_options = Button('options_button.png', 520, 300, 0.8)
+ps_back_to_menu_button = Button('back_to_menu_button.png', 515, 400, 0.8)
+ps_exit_game = Button('exit_game_button.png', 520, 500, 0.8)
+
 
 player_sprite = pygame.sprite.Group()
 invader_group = pygame.sprite.Group()

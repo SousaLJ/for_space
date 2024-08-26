@@ -110,11 +110,22 @@ while running:
 
         # Logica do hit no player
         # False pois somente o hit vai sumir mas o player permanecerá vivo perdendo HP
-        # Precisa implementar ainda o dano do tiro do invader
+        # Precisa implementar ainda algo para validar o HP perdido
         if invader_fire:
             for fire in invader_fire:
+                # O modo como a classe Fire foi implementada (recebendo um group como inicializador)
+                # parar herdar, vincula um ao outro tornando-os 1 coisa só.
+                # Por exemplo, no código abaixo estamos checando cada instancia de tiro criada
+                # a partir do click no mouse ou barra de espaço, essa instancia é adicionada
+                # ao grupo player_sprite e checa a colisão com invader_group
+                # Porem, se analisarmos bem, como o tiro é um player_sprite, 
+                # todo tiro gerado a partir da classe invader checa colisão com o tiro do player
+                # criando uma mecanica na qual da para anular o tiro do invader com o tiro do player
+                # Entao é necessario certificar se a gente vai querer isso ou não no nosso game
+
                 if pygame.sprite.spritecollide(fire, player_sprite, False):
                     fire.kill()
+
         # if colisao:
         #   game_state = 'game_over'
         

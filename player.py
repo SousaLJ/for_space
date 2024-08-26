@@ -3,8 +3,7 @@ from os.path import join
 from utils import surface_load
 from pygame.sprite import Sprite
 from config import *
-
-laser = surface_load(join("images", "fire.png"), True, (45, 45))
+from fire import Fire
 
 class Player(Sprite):
   def __init__(self, pos, groups):
@@ -45,19 +44,8 @@ class Player(Sprite):
       
     # fire
     if (keys[pygame.K_SPACE] or mouse[0]) and self.can_shoot:
-      Fire(laser, self.rect.midtop, player_sprite)
+      player_sprite.add(Fire(self.rect.midtop, 10, player_sprite))
       self.can_shoot = False
       self.check_shoot_cooldown = pygame.time.get_ticks()
       
     self.fire_timer()
-
-class Fire(Sprite):
-  def __init__(self, surf, pos, groups) -> None:
-    super().__init__(groups)
-    self.image = surf
-    self.rect = self.image.get_rect(midbottom = pos)
-    
-  def update(self):
-    self.rect.y -= 10
-    if self.rect.bottom <= 0:
-      self.kill()

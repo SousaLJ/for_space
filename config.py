@@ -28,10 +28,20 @@ scoreboard_game_over_button = Button('scoreboard_button.png', 720, 293, 1.1)
 exit_game_game_over_button = Button('exit_game_button.png', 652, 370, 1)
 back_to_menu_game_over_button = Button('back_to_menu_button.png', 330, 295, 1)
 
+
 player_sprite = pygame.sprite.Group()
 invader_group = pygame.sprite.Group()
+invader_fire = pygame.sprite.Group()
+
+
+# Eventos
+INVADERFIRE = pygame.USEREVENT + 1
+pygame.time.set_timer(INVADERFIRE, 1000) # frequencia de tiros dos invaders em millisegundos 
 
 clock = pygame.time.Clock()
 dt = clock.tick(60) / 10      # teste
 
 pause_screen = False
+
+pygame.font.init()
+font = pygame.font.Font(join('font', 'pixeled.ttf'), 20)

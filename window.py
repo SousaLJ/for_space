@@ -6,14 +6,22 @@ from os.path import join
 from config import *
 
 pygame.init()
+# Invaders
 
-# Invaders   
 create_invaders()
+
 # Player
 player = Player((ALTURA_TELA / 2, LARGURA_TELA / 2), player_sprite)
 
 running = True
 clock = pygame.time.Clock()
+
+score = 0
+def display_score():
+    score_surface = font.render(f'Score: {score}', False, 'white')
+    score_rect = score_surface.get_rect(topleft = (10, -10))
+    display.blit(score_surface, score_rect)
+
 
 game_state = 'menu'
 previous_game_state = game_state
@@ -46,6 +54,9 @@ while running:
         # increase fire rate test
         if event.type == pygame.KEYDOWN and event.key == pygame.K_0 and game_state == 'playing':
             player.cooldown = 100
+
+        if event.type == INVADERFIRE:
+            invaders_fire()
             
     if game_state == 'menu':
         display.blit(menu_background, (0,0))
@@ -78,13 +89,32 @@ while running:
 
     elif game_state == 'playing':
         display.blit(ingame_background, (0, 0))
+        display_score()
         invader_group.update()
         invader_group.draw(display)
         check_invader_position()
+
+        invader_fire.update()
+        invader_fire.draw(display)
         
         player_sprite.update()
         player_sprite.draw(display)
         
+        # Logica do hit no invader
+        for fire in player_sprite:
+            invader_hit = pygame.sprite.spritecollide(fire, invader_group, True)
+            if invader_hit:
+                for invader in invader_hit:
+                    score += invader.reward
+                fire.kill()
+
+        # Logica do hit no player
+        # False pois somente o hit vai sumir mas o player permanecerá vivo perdendo HP
+        # Precisa implementar ainda o dano do tiro do invader
+        if invader_fire:
+            for fire in invader_fire:
+                if pygame.sprite.spritecollide(fire, player_sprite, False):
+                    fire.kill()
         # if colisao:
         #   game_state = 'game_over'
         

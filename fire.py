@@ -2,6 +2,7 @@ from pygame.sprite import Sprite
 from utils import surface_load
 from os.path import join
 from config import ALTURA_TELA
+import pygame
 
 
 class Fire(Sprite):
@@ -21,6 +22,7 @@ class InvaderFire(Sprite):
     def __init__(self, pos, speed):
         super().__init__()
         self.image = surface_load(join('images', 'fire.png'), True, (40, 40))
+        self.image = pygame.transform.rotate(self.image, 180)  # Rotaciona a imagem em 180 graus
         self.rect = self.image.get_rect(center=pos)
         self.speed = speed
 

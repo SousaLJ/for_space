@@ -1,6 +1,7 @@
 import pygame
 from button import Button
 from os.path import join
+from random import randint
 
 LARGURA_TELA = 1280
 ALTURA_TELA = 720
@@ -34,15 +35,18 @@ ps_options = Button('options_button.png', 520, 300, 0.8)
 ps_back_to_menu_button = Button('back_to_menu_button.png', 515, 400, 0.8)
 ps_exit_game = Button('exit_game_button.png', 520, 500, 0.8)
 
-
 player_sprite = pygame.sprite.Group()
 invader_group = pygame.sprite.Group()
 invader_fire = pygame.sprite.Group()
-
+special_invader_group = pygame.sprite.GroupSingle()
+explosion_group = pygame.sprite.Group()
 
 # Eventos
 INVADERFIRE = pygame.USEREVENT + 1
 pygame.time.set_timer(INVADERFIRE, 1000) # frequencia de tiros dos invaders em millisegundos 
+
+SPECIALINVADER = pygame.USEREVENT + 2
+pygame.time.set_timer(SPECIALINVADER, randint(5000, 20000))
 
 clock = pygame.time.Clock()
 dt = clock.tick(60) / 10      # teste

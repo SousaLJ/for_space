@@ -26,7 +26,7 @@ def check_invader_position():
 def invaders_fire():
     if invader_group.sprites():
         random_invader = random.choice(invader_group.sprites())
-        fire = InvaderFire(random_invader.rect.center, -6)
+        fire = InvaderFire(random_invader.rect.center, -2)
         invader_fire.add(fire)
 
 class Invaders(pygame.sprite.Sprite):
@@ -64,3 +64,22 @@ class Invaders(pygame.sprite.Sprite):
     def update(self):
         self.animation_state()
         self.rect.x += self.direction
+        self.mask = pygame.mask.from_surface(self.image)
+
+class SpecialInvader(pygame.sprite.Sprite):
+    def __init__(self, side):
+        super().__init__()
+        self.image = pygame.image.load(join('images', 'frame1_invader1.png')).convert_alpha()
+
+        if side == 0:
+            x = LARGURA_TELA + 30
+            self.speed = -3
+
+        else:
+            x = -30
+            self.speed = 3
+        
+        self.rect = self.image.get_rect(topleft=(x, 50))
+
+    def update(self):
+        self.rect.x += self.speed

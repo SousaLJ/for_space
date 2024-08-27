@@ -6,8 +6,7 @@ from config import *
 from fire import Fire
 
 def create_player():
-  player = Player((ALTURA_TELA / 2, LARGURA_TELA / 2), player_sprite)
-  player_sprite.add(player)
+  return Player((ALTURA_TELA / 2, LARGURA_TELA / 2), player_sprite)
   
 class Player(Sprite):
   def __init__(self, pos, groups):
@@ -40,6 +39,9 @@ class Player(Sprite):
     self.direcao.x = int(keys[pygame.K_d]) - int(keys[pygame.K_a])
   
     self.rect.center += self.direcao * self.speed * dt        # dt em fase de testes ainda
+    
+    self.mask = pygame.mask.from_surface(self.image)
+    
     if self.rect.left <= 0:
       self.rect.left = 0
     

@@ -4,17 +4,10 @@ from invaders import *
 from sys import exit
 from os.path import join
 from config import *
+from fire import *
 
 pygame.init()
 
-# Invaders
-create_invaders()
-
-# Player
-create_player()
-
-running = True
-clock = pygame.time.Clock()
 
 score = 0
 def display_score():
@@ -22,6 +15,15 @@ def display_score():
     score_rect = score_surface.get_rect(topleft = (10, -10))
     display.blit(score_surface, score_rect)
 
+# Invaders
+create_invaders()
+
+# Player
+player = create_player()
+player_sprite.add(player)
+
+running = True
+clock = pygame.time.Clock()
 
 game_state = 'menu'
 
@@ -39,21 +41,26 @@ while running:
             pygame.quit()
             exit()
         
-        # esc in-game pausa o jogo e so despausa ao apertar esc novamente
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and not pause_screen and game_state == 'playing':
-            print("pause")
-            pause_screen = True
+        if game_state == 'playing':
+            # esc in-game pausa o jogo e so despausa ao apertar esc novamente
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and not pause_screen:
+                print("pause")
+                pause_screen = True
 
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and pause_screen and game_state == 'playing':
-            print("saindo do pause")
-            pause_screen = False
-            
-        # increase fire rate test
-        # if event.type == pygame.KEYDOWN and event.key == pygame.K_0 and game_state == 'playing':
-        #     player.cooldown = 100
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and pause_screen:
+                print("saindo do pause")
+                pause_screen = False
+                
+            # increase fire rate test
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_0 and game_state == 'playing':
+                player.cooldown = 100
 
-        if event.type == INVADERFIRE and not pause_screen:
-            invaders_fire()
+            if event.type == INVADERFIRE and not pause_screen:
+                invaders_fire()
+
+            if event.type == SPECIALINVADER:
+                special_invader = SpecialInvader(random.choice([0, 1]))
+                special_invader_group.add(special_invader)
 
     match game_state:
         case 'menu':      
@@ -73,6 +80,7 @@ while running:
 
         case 'scoreboard':
             display.blit(score_board_background, (0, 0))
+
             if back_to_menu_button.draw(display):
                 game_state = 'menu'
             
@@ -82,6 +90,7 @@ while running:
 
         case 'credits':
             display.blit(credits_background, (0, 0))
+
             if back_to_menu_button.draw(display):
                 game_state = 'menu'
 
@@ -94,6 +103,8 @@ while running:
                 invader_group.draw(display)
                 player_sprite.draw(display)
                 invader_fire.draw(display)
+                special_invader_group.draw(display)
+                explosion_group.draw(display)
 
                 if ps_play_button.draw(display):
                     pause_screen = False
@@ -116,6 +127,9 @@ while running:
                     exit()
                 
             else:
+                special_invader_group.update()
+                special_invader_group.draw(display)
+
                 check_invader_position()
                 invader_group.update()
                 invader_group.draw(display)
@@ -125,13 +139,18 @@ while running:
                 
                 player_sprite.update()
                 player_sprite.draw(display)
+
+                explosion_group.update()
+                explosion_group.draw(display)
                 
                 # Logica do hit no invader
                 for fire in player_sprite:
-                    invader_hit = pygame.sprite.spritecollide(fire, invader_group, True)
-                    if invader_hit:
-                        for invader in invader_hit:
+                    invader_hitted = pygame.sprite.spritecollide(fire, invader_group, True, pygame.sprite.collide_mask)
+                    if invader_hitted:
+                        for invader in invader_hitted:
                             score += invader.reward
+                            explosion = Explosion(invader.rect.center)
+                            explosion_group.add(explosion)
                         fire.kill()
 
                 # Logica do hit no player
@@ -148,7 +167,9 @@ while running:
                         # todo tiro gerado a partir da classe invader checa colisão com o tiro do player
                         # criando uma mecanica na qual da para anular o tiro do invader com o tiro do player
                         # Entao é necessario certificar se a gente vai querer isso ou não no nosso game
-                        if pygame.sprite.spritecollide(fire, player_sprite, False):
+                        if pygame.sprite.spritecollide(fire, player_sprite, False, pygame.sprite.collide_mask):
+                            explosion = Explosion(fire.rect.center)
+                            explosion_group.add(explosion)
                             fire.kill()
 
                 # if colisao:

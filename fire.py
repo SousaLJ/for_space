@@ -16,6 +16,7 @@ class Fire(Sprite):
     self.rect.y -= self.speed
     if self.rect.top >= ALTURA_TELA + 30:
       self.kill()
+      
 
 
 class InvaderFire(Sprite):
@@ -30,3 +31,16 @@ class InvaderFire(Sprite):
        self.rect.y -= self.speed
        if self.rect.y <= -50:
           self.kill()
+
+class Explosion(Sprite):
+    def __init__(self, position):
+      super().__init__()
+      self.image = pygame.image.load(join('images', 'lil_explosion.png'))
+      self.rect = self.image.get_rect(center=(position))
+      self.counter = 0
+
+    def update(self):
+      self.counter += 1
+      if self.counter > 15:
+        self.kill()
+        self.counter = 0

@@ -20,7 +20,6 @@ create_invaders()
 
 # Player
 player = create_player()
-player_sprite.add(player)
 
 running = True
 clock = pygame.time.Clock()
@@ -118,6 +117,7 @@ while running:
                     invader_fire.empty()
                     invader_group.empty()
                     player_sprite.empty()
+                    player_fire.empty()
                     create_invaders()
                     create_player()
                     pause_screen = False
@@ -140,17 +140,25 @@ while running:
                 player_sprite.update()
                 player_sprite.draw(display)
 
+                player_fire.update()
+                player_fire.draw(display)
+
                 explosion_group.update()
                 explosion_group.draw(display)
                 
                 # Logica do hit no invader
-                for fire in player_sprite:
+                for fire in player_fire:
                     invader_hitted = pygame.sprite.spritecollide(fire, invader_group, True, pygame.sprite.collide_mask)
+                    # special_invader_hitted = pygame.sprite.spritecollide(fire, special_invader_group, True)
                     if invader_hitted:
                         for invader in invader_hitted:
                             score += invader.reward
                             explosion = Explosion(invader.rect.center)
                             explosion_group.add(explosion)
+                        # for special_invader in special_invader_hitted:
+                        #     score += special_invader.reward
+                        #     explosion = Explosion(special_invader.rect.center)
+                        #     explosion_group.add(explosion)
                         fire.kill()
 
                 # Logica do hit no player

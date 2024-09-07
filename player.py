@@ -38,7 +38,7 @@ class Player(Sprite):
     # se D pressionado (1 - 0) = 1, se A pressionado (0 - 1) = -1, se A e D pressionados (1 - 1) = 0
     self.direcao.x = int(keys[pygame.K_d]) - int(keys[pygame.K_a])
   
-    self.rect.center += self.direcao * self.speed * dt        # dt em fase de testes ainda
+    self.rect.center += self.direcao * self.speed      # dt em fase de testes ainda
     
     self.mask = pygame.mask.from_surface(self.image)
     
@@ -50,7 +50,7 @@ class Player(Sprite):
       
     # fire
     if (keys[pygame.K_SPACE] or mouse[0]) and self.can_shoot:
-      player_sprite.add(Fire(self.rect.midtop, 10, player_sprite))
+      Fire(self.rect.midtop, 10, player_fire)
       self.can_shoot = False
       self.check_shoot_cooldown = pygame.time.get_ticks()
       

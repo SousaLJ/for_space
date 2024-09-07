@@ -70,6 +70,8 @@ class SpecialInvader(pygame.sprite.Sprite):
     def __init__(self, side):
         super().__init__()
         self.image = pygame.image.load(join('images', 'frame1_invader1.png')).convert_alpha()
+        
+        self.reward = 500
 
         if side == 0:
             x = LARGURA_TELA + 30

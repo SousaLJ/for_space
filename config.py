@@ -38,6 +38,7 @@ ps_exit_game = Button('exit_game_button.png', 520, 500, 0.8)
 player_sprite = pygame.sprite.Group()
 invader_group = pygame.sprite.Group()
 invader_fire = pygame.sprite.Group()
+player_fire = pygame.sprite.Group()
 special_invader_group = pygame.sprite.GroupSingle()
 explosion_group = pygame.sprite.Group()
 
@@ -49,7 +50,6 @@ SPECIALINVADER = pygame.USEREVENT + 2
 pygame.time.set_timer(SPECIALINVADER, randint(5000, 20000))
 
 clock = pygame.time.Clock()
-dt = clock.tick(60) / 10      # teste
 
 pause_screen = False
 

@@ -201,6 +201,14 @@ while running:
 
         # Verifica se o botão de jogar novamente foi pressionado
         if play_again_game_over_button.draw(display):
+            score = 0
+            invader_fire.empty()
+            invader_group.empty()
+            player_sprite.empty()
+            player_fire.empty()
+            create_invaders()
+            create_player()
+            pause_screen = False
             game_state = 'playing'
         
         # Verifica se o botão de voltar para o menu foi pressionado

@@ -36,7 +36,7 @@ class Player(Sprite):
     mouse = pygame.mouse.get_pressed()
     
     # se D pressionado (1 - 0) = 1, se A pressionado (0 - 1) = -1, se A e D pressionados (1 - 1) = 0
-    self.direcao.x = int(keys[pygame.K_d]) - int(keys[pygame.K_a])
+    self.direcao.x = int(keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
   
     self.rect.center += self.direcao * self.speed      # dt em fase de testes ainda
     

@@ -191,7 +191,20 @@ while running:
 
                                 # Retira uma vida do jogador.
                                 lifes_left -= 1 
-        
+                            
+                    # Se houver colisões, destacar os sprites e calcular a área de colisão.
+                    colisoes_player_aliens = pygame.sprite.groupcollide(player_sprite, invader_group, False, True, pygame.sprite.collide_mask)
+                    if colisoes_player_aliens:
+                        for ships, collided_sprites in colisoes_player_aliens.items():
+                            for invaders in collided_sprites:
+                                # Calcular a área de interseção da colisão.
+                                area_colisao = ships.rect.clip(invaders.rect)
+                        
+                        # Exibe uma imagem de explosão na coordenada (x, y) da colisão e retira uma vida do jogador.
+                        explosion = Explosion(area_colisao.center)
+                        explosion_group.add(explosion)
+                        lifes_left -= 1     
+
     if game_state == 'game_over':
         # Pinta no fundo a tela de fim de jogo.
         display.blit(game_over_background, (0, 0))

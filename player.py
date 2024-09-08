@@ -35,8 +35,11 @@ class Player(Sprite):
     keys = pygame.key.get_pressed()
     mouse = pygame.mouse.get_pressed()
     
-    # se D pressionado (1 - 0) = 1, se A pressionado (0 - 1) = -1, se A e D pressionados (1 - 1) = 0
-    self.direcao.x = int(keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
+    # se D (ou -->) pressionado (1 - 0) = 1, se A (ou <--) pressionado (0 - 1) = -1, se A (ou <--) e D (ou -->) pressionados (1 - 1) = 0
+    self.direcao[0] = (int(keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])) or (int(keys[pygame.K_d]) - int(keys[pygame.K_a]))
+
+    # Semelhante à linha anterior, porém é necessário que o valor retornado tenha o sinal trocado, a fim de que a movimentação não fique invertida.
+    self.direcao[1] = -((int(keys[pygame.K_UP]) - int(keys[pygame.K_DOWN])) or int(keys[pygame.K_w]) - int(keys[pygame.K_s]))
   
     self.rect.center += self.direcao * self.speed      # dt em fase de testes ainda
     
@@ -47,6 +50,12 @@ class Player(Sprite):
     
     if self.rect.right >= LARGURA_TELA:
       self.rect.right = LARGURA_TELA
+    
+    if self.rect.bottom >= ALTURA_TELA:
+      self.rect.bottom = ALTURA_TELA
+
+    if self.rect.top <= 0:
+      self.rect.top = 0
       
     # fire
     if (keys[pygame.K_SPACE] or mouse[0]) and self.can_shoot:

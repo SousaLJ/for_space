@@ -24,10 +24,10 @@ scoreboard_button = Button('scoreboard_button.png', 255.8, 487.1, 1)
 options_button = Button('options_button.png', 849.4, 487.1, 1)
 credits_button = Button('credits_button.png', 1033, 402.7, 1)
 back_to_menu_button = Button('back_to_menu_button.png', 20, 20, 1)
-play_again_game_over_button = Button('play_again_button.png', 410, 370, 1)
-scoreboard_game_over_button = Button('scoreboard_button.png', 720, 293, 1.1)
-exit_game_game_over_button = Button('exit_game_button.png', 652, 370, 1)
-back_to_menu_game_over_button = Button('back_to_menu_button.png', 330, 295, 1)
+play_again_game_over_button = Button('play_again_button.png', 430, 390, 1)
+scoreboard_game_over_button = Button('scoreboard_button.png', 740, 310, 1)
+exit_game_game_over_button = Button('exit_game_button.png', 675, 390, 1)
+back_to_menu_game_over_button = Button('back_to_menu_button.png', 350, 310, 1)
 
 # Pause Screen button (ps)
 ps_play_button = Button('play_button.png', 520, 200, 0.8)
@@ -55,3 +55,8 @@ pause_screen = False
 
 pygame.font.init()
 font = pygame.font.Font(join('font', 'pixeled.ttf'), 20)
+
+# Configurações das vidas do jogador.
+lifes_left = 5
+lifes_left_image = pygame.image.load(join('images', 'vida_coracao.png')).convert_alpha()
+coordinate_x = 1240

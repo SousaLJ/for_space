@@ -94,123 +94,126 @@ while running:
                 game_state = 'menu'
 
         case 'playing':
-            display.blit(ingame_background, (0, 0))
+            if lifes_left == 0:
+                game_state = 'game_over'
 
-            display_score()
-
-            if pause_screen:
-                invader_group.draw(display)
-                player_sprite.draw(display)
-                invader_fire.draw(display)
-                special_invader_group.draw(display)
-                explosion_group.draw(display)
-
-                if ps_play_button.draw(display):
-                    pause_screen = False
-
-                if ps_options.draw(display):
-                    ...
-    
-                if ps_back_to_menu_button.draw(display):
-                    game_state = 'menu'
-                    score = 0
-                    invader_fire.empty()
-                    invader_group.empty()
-                    player_sprite.empty()
-                    player_fire.empty()
-                    create_invaders()
-                    create_player()
-                    pause_screen = False
-
-                if ps_exit_game.draw(display):
-                    pygame.quit()
-                    exit()
-                
             else:
-                special_invader_group.update()
-                special_invader_group.draw(display)
+                display.blit(ingame_background, (0, 0))
 
-                check_invader_position()
-                invader_group.update()
-                invader_group.draw(display)
+                display_score()
 
-                invader_fire.update()
-                invader_fire.draw(display)
-                
-                player_sprite.update()
-                player_sprite.draw(display)
+                # Exibe as vidas do jogador.
+                for i in range(lifes_left):
+                    display.blit(lifes_left_image, (coordinate_x - (i*40), 0))
 
-                player_fire.update()
-                player_fire.draw(display)
+                if pause_screen:
+                    invader_group.draw(display)
+                    player_sprite.draw(display)
+                    invader_fire.draw(display)
+                    special_invader_group.draw(display)
+                    explosion_group.draw(display)
 
-                explosion_group.update()
-                explosion_group.draw(display)
-                
-                # Logica do hit no invader
-                for fire in player_fire:
-                    invader_hitted = pygame.sprite.spritecollide(fire, invader_group, True, pygame.sprite.collide_mask)
-                    # special_invader_hitted = pygame.sprite.spritecollide(fire, special_invader_group, True)
-                    if invader_hitted:
-                        for invader in invader_hitted:
-                            score += invader.reward
-                            explosion = Explosion(invader.rect.center)
-                            explosion_group.add(explosion)
-                        # for special_invader in special_invader_hitted:
-                        #     score += special_invader.reward
-                        #     explosion = Explosion(special_invader.rect.center)
-                        #     explosion_group.add(explosion)
-                        fire.kill()
+                    if ps_play_button.draw(display):
+                        pause_screen = False
 
-                # Logica do hit no player
-                # False pois somente o hit vai sumir mas o player permanecerá vivo perdendo HP
-                # Precisa implementar ainda algo para validar o HP perdido
-                if invader_fire:
-                    for fire in invader_fire:
-                        # O modo como a classe Fire foi implementada (recebendo um group como inicializador)
-                        # parar herdar, vincula um ao outro tornando-os 1 coisa só.
-                        # Por exemplo, no código abaixo estamos checando cada instancia de tiro criada
-                        # a partir do click no mouse ou barra de espaço, essa instancia é adicionada
-                        # ao grupo player_sprite e checa a colisão com invader_group
-                        # Porem, se analisarmos bem, como o tiro é um player_sprite, 
-                        # todo tiro gerado a partir da classe invader checa colisão com o tiro do player
-                        # criando uma mecanica na qual da para anular o tiro do invader com o tiro do player
-                        # Entao é necessario certificar se a gente vai querer isso ou não no nosso game
-                        if pygame.sprite.spritecollide(fire, player_sprite, False, pygame.sprite.collide_mask):
-                            explosion = Explosion(fire.rect.center)
-                            explosion_group.add(explosion)
+                    if ps_options.draw(display):
+                        ...
+        
+                    if ps_back_to_menu_button.draw(display):
+                        game_state = 'menu'
+                        score = 0
+                        invader_fire.empty()
+                        invader_group.empty()
+                        player_sprite.empty()
+                        player_fire.empty()
+                        create_invaders()
+                        create_player()
+                        pause_screen = False
+
+                    if ps_exit_game.draw(display):
+                        pygame.quit()
+                        exit()
+                    
+                else:
+                    special_invader_group.update()
+                    special_invader_group.draw(display)
+
+                    check_invader_position()
+                    invader_group.update()
+                    invader_group.draw(display)
+
+                    invader_fire.update()
+                    invader_fire.draw(display)
+                    
+                    player_sprite.update()
+                    player_sprite.draw(display)
+
+                    player_fire.update()
+                    player_fire.draw(display)
+
+                    explosion_group.update()
+                    explosion_group.draw(display)
+                    
+                    # Logica do hit no invader
+                    for fire in player_fire:
+                        invader_hitted = pygame.sprite.spritecollide(fire, invader_group, True, pygame.sprite.collide_mask)
+                        # special_invader_hitted = pygame.sprite.spritecollide(fire, special_invader_group, True)
+                        if invader_hitted:
+                            for invader in invader_hitted:
+                                score += invader.reward
+                                explosion = Explosion(invader.rect.center)
+                                explosion_group.add(explosion)
+                            # for special_invader in special_invader_hitted:
+                            #     score += special_invader.reward
+                            #     explosion = Explosion(special_invader.rect.center)
+                            #     explosion_group.add(explosion)
                             fire.kill()
 
-                # if colisao:
-                #   game_state = 'game_over'
+                    # Logica do hit no player
+                    # False pois somente o hit vai sumir mas o player permanecerá vivo perdendo HP
+                    # Precisa implementar ainda algo para validar o HP perdido
+                    if invader_fire:
+                        for fire in invader_fire:
+                            # O modo como a classe Fire foi implementada (recebendo um group como inicializador)
+                            # parar herdar, vincula um ao outro tornando-os 1 coisa só.
+                            # Por exemplo, no código abaixo estamos checando cada instancia de tiro criada
+                            # a partir do click no mouse ou barra de espaço, essa instancia é adicionada
+                            # ao grupo player_sprite e checa a colisão com invader_group
+                            # Porem, se analisarmos bem, como o tiro é um player_sprite, 
+                            # todo tiro gerado a partir da classe invader checa colisão com o tiro do player
+                            # criando uma mecanica na qual da para anular o tiro do invader com o tiro do player
+                            # Entao é necessario certificar se a gente vai querer isso ou não no nosso game
+                            if pygame.sprite.spritecollide(fire, player_sprite, False, pygame.sprite.collide_mask):
+                                explosion = Explosion(fire.rect.center)
+                                explosion_group.add(explosion)
+                                fire.kill()
+
+                                # Retira uma vida do jogador.
+                                lifes_left -= 1 
         
     if game_state == 'game_over':
         # Pinta no fundo a tela de fim de jogo.
-        # display.blit(game_over_background, (0, 0))
+        display.blit(game_over_background, (0, 0))
+
+        # Reinicia as vidas do jogador.
+        lifes_left = 5
 
         # Verifica se o botão de jogar novamente foi pressionado
         if play_again_game_over_button.draw(display):
             game_state = 'playing'
-        # if play_again_game_over_button.draw(display):
-        #     game_state == 'playing'
         
         # Verifica se o botão de voltar para o menu foi pressionado
         elif back_to_menu_game_over_button.draw(display):
             game_state = 'menu'
-        # # Verifica se o botão de voltar para o menu foi pressionado
-        # elif back_to_menu_game_over_button.draw(display):
-        #     game_state = 'menu'
-        
+              
         # Verifica se o botão de mostrar o scoreboard foi pressionado
         elif scoreboard_game_over_button.draw(display):
-            game_state = 'menu_scoreboard'
-        # # Verifica se o botão de mostrar o scoreboard foi pressionado
-        # elif scoreboard_game_over_button.draw(display):
-        #     game_state = 'menu_scoreboard'
+            game_state = 'scoreboard'
         
         # # Verifica se o botão de sair do jogo foi pressionado
-        # elif exit_game_game_over_button.draw(display):
-        #     pygame.quit()
-        #     exit()
+        elif exit_game_game_over_button.draw(display):
+            pygame.quit()
+            exit()
 
     else:
         pass

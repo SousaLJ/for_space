@@ -129,6 +129,7 @@ while running:
                         create_invaders()
                         create_player()
                         pause_screen = False
+                        lifes_left = 5
 
                     if ps_exit_game.draw(display):
                         pygame.quit()

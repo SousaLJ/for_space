@@ -1,5 +1,7 @@
 import pygame
+from dropdown import *
 from button import Button
+from slider import *
 from os.path import join
 from random import randint
 
@@ -17,6 +19,7 @@ ingame_background = pygame.image.load(join('images', 'universo.png'))
 credits_background = pygame.image.load(join('images', 'credits_bg.png'))
 game_over_background = pygame.image.load(join('images', 'game_over_screen_sem_botoes.png'))
 score_board_background = pygame.image.load(join('images', 'score_board.png'))
+options_background = pygame.image.load(join('images', 'options_bg.png'))
 
 # Instanciando botão
 play_button = Button('play_button.png', 72.0, 402.7, 1)
@@ -24,10 +27,26 @@ scoreboard_button = Button('scoreboard_button.png', 255.8, 487.1, 1)
 options_button = Button('options_button.png', 849.4, 487.1, 1)
 credits_button = Button('credits_button.png', 1033, 402.7, 1)
 back_to_menu_button = Button('back_to_menu_button.png', 20, 20, 1)
+back_to_game_button = Button('back_to_game.png', 20, 20, 1)
 play_again_game_over_button = Button('play_again_button.png', 430, 390, 1)
 scoreboard_game_over_button = Button('scoreboard_button.png', 740, 310, 1)
 exit_game_game_over_button = Button('exit_game_button.png', 675, 390, 1)
 back_to_menu_game_over_button = Button('back_to_menu_button.png', 350, 310, 1)
+
+# Definir os sliders e botões no início do código
+musica_slider = Slider(650, 215, 300, 0, 100, 50)
+efeitos_slider = Slider(650, 315, 300, 0, 100, 50)
+brilho_slider = Slider(650, 535, 300, 0, 100, 50)
+
+# Inicializar valores padrão
+volume_music = 50
+volume_effects = 50
+brightness = 50
+fps = 60  # Definido inicialmente para 60Hz
+
+#dropdown de seleção para a taxa de atualização	
+dropdown_options = ['30 hz', '60 hz', '120 hz', '144 hz']
+dropdown = Dropdown(695, 405, 150, 40, dropdown_options)
 
 # Pause Screen button (ps)
 ps_play_button = Button('play_button.png', 520, 200, 0.8)

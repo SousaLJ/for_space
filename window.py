@@ -77,14 +77,11 @@ while running:
             previous_game_state = game_state
             game_state = 'menu_credits'
 
-    elif game_state == 'menu_scoreboard':
+    elif game_state == 'scoreboard':
         display.blit(score_board_background, (0, 0))
         if back_to_menu_button.draw(display):
             game_state = 'menu'
             
-    elif game_state == 'menu_options':
-        if back_to_menu_button.draw(display):
-            game_state = 'menu'
 
 
     elif game_state == 'playing':

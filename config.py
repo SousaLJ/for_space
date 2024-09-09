@@ -3,6 +3,11 @@ from button import Button
 from os.path import join
 from random import randint
 
+''' Para uma futura opção de colocar em tela cheia.
+display = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
+LARGURA_TELA = display.get_rect().width
+ALTURA_TELA = display.get_rect().height'''
+
 LARGURA_TELA = 1280
 ALTURA_TELA = 720
 display = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA), pygame.SCALED | pygame.RESIZABLE)
@@ -59,4 +64,7 @@ font = pygame.font.Font(join('font', 'pixeled.ttf'), 20)
 # Configurações das vidas do jogador.
 lifes_left = 5
 lifes_left_image = pygame.image.load(join('images', 'vida_coracao.png')).convert_alpha()
-coordinate_x = 1240
+coordinate_x_lifes = 1240
+
+# Configurações dos obstáculos.
+coordinate_x_obstacles = 1050

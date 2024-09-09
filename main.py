@@ -5,6 +5,7 @@ from sys import exit
 from os.path import join
 from config import *
 from fire import *
+from obstacles import *
 
 pygame.init()
 
@@ -14,6 +15,12 @@ def display_score():
     score_surface = font.render(f'Score: {score}', False, 'white')
     score_rect = score_surface.get_rect(topleft = (10, -10))
     display.blit(score_surface, score_rect)
+
+# Obstacles and Damages.
+obstacles_group = pygame.sprite.Group()
+for i in range(4):
+    obstacle = Obstacles(coordinate_x_obstacles - (i*345), 450)
+    obstacles_group.add(obstacle)
 
 # Invaders
 create_invaders()
@@ -104,8 +111,11 @@ while running:
 
                 # Exibe as vidas do jogador.
                 for i in range(lifes_left):
-                    display.blit(lifes_left_image, (coordinate_x - (i*40), 0))
-
+                    display.blit(lifes_left_image, (coordinate_x_lifes - (i*40), 0))
+                
+                # Exibe os obstáculos.
+                obstacles_group.draw(display)
+                
                 if pause_screen:
                     invader_group.draw(display)
                     player_sprite.draw(display)
@@ -155,6 +165,23 @@ while running:
                     explosion_group.update()
                     explosion_group.draw(display)
                     
+                    for obstacle in obstacles_group:
+                        for invader in invader_group:
+                            invader_collision = pygame.sprite.collide_rect(obstacle, invader)
+                        
+                        for ship in player_sprite:
+                            ship_collision = pygame.sprite.collide_rect(obstacle, ship)
+
+                        for fire in player_fire:
+                            if pygame.sprite.collide_rect(obstacle, fire):
+                                fire.kill()
+
+                        for fire in invader_fire:
+                            invader_fire_collision = pygame.sprite.collide_rect(obstacle, fire)
+
+                            if invader_fire_collision:
+                                fire.kill()                            
+
                     # Logica do hit no invader
                     for fire in player_fire:
                         invader_hitted = pygame.sprite.spritecollide(fire, invader_group, True, pygame.sprite.collide_mask)

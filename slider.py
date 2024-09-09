@@ -7,7 +7,10 @@ class Slider():
         self.min_val = min_val
         self.max_val = max_val
         self.current_val = initial_val
-        self.slider_rect = pygame.Rect(x, y - 5, 10, 30)  # Ajusta a posição do slider
+
+        # Calcula a posição inicial do slider com base em initial_val
+        initial_pos = (initial_val - self.min_val) / (self.max_val - self.min_val) * (self.rect.width - 10)
+        self.slider_rect = pygame.Rect(x + initial_pos, y - 5, 10, 30)  # Ajusta a posição do slider
         self.grabbed = False
 
     def draw(self, surface):
@@ -29,3 +32,4 @@ class Slider():
             self.current_val = self.min_val + ((self.slider_rect.x - self.rect.x) / (self.rect.width - 10)) * (self.max_val - self.min_val)
 
         return self.current_val
+

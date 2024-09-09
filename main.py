@@ -1,4 +1,6 @@
 import pygame
+from musica import *
+from pygame import mixer
 from player import *
 from invaders import *
 from sys import exit
@@ -9,7 +11,7 @@ from dropdown import *
 from obstacles import *
 
 pygame.init()
-
+mixer.init()
 
 score = 0
 
@@ -38,10 +40,16 @@ running = True
 clock = pygame.time.Clock()
 
 game_state = 'menu'
-
 pause_screen = False
 
+#carregando musicas e efeitos sonoros
+
+mixer.music.play(-1)
+
+
+
 while running:
+
     clock.tick(fps)
     # fundo com a cor da for_code
     display.fill("#1E1647")
@@ -78,7 +86,9 @@ while running:
                 special_invader_group.add(special_invader)
 
     match game_state:
-        case 'menu':      
+        case 'menu':
+            tocar_musica()
+            
             display.blit(menu_background, (0,0))
 
             if scoreboard_button.draw(display):
@@ -94,6 +104,7 @@ while running:
                 game_state = 'credits'
 
         case 'scoreboard':
+            tocar_musica()
             display.blit(score_board_background, (0, 0))
 
             if back_to_menu_button.draw(display):
@@ -115,7 +126,14 @@ while running:
 
             volume_musica = musica_slider.draw(display)
             volume_efeitos = efeitos_slider.draw(display)
-        
+
+            volume_musica_percent = volume_musica / 100
+            mixer.music.set_volume(volume_musica_percent)
+
+            volume_efeitos_percent = volume_efeitos / 100
+            som_invader_morto.set_volume(volume_efeitos_percent)
+            som_ship_exp.set_volume(volume_efeitos_percent)
+            som_shoot.set_volume(volume_efeitos_percent)
             
             #opções de display
             brilho_text = font.render("Brilho:", True, 'white')
@@ -149,7 +167,7 @@ while running:
             
         case 'ps_options':
             display.blit(options_background, (0, 0))
-
+            tocar_musica()
             #opções de audio
             musica_text = font.render("Volume da Musica:", True, 'white')
             display.blit(musica_text, (345, 200))
@@ -160,7 +178,14 @@ while running:
             volume_musica = musica_slider.draw(display)
             volume_efeitos = efeitos_slider.draw(display)
         
-            
+            volume_musica_percent = volume_musica / 100
+            mixer.music.set_volume(volume_musica_percent)
+
+            volume_efeitos_percent = volume_efeitos / 100
+            som_invader_morto.set_volume(volume_efeitos_percent)
+            som_ship_exp.set_volume(volume_efeitos_percent)
+            som_shoot.set_volume(volume_efeitos_percent)
+
             #opções de display
             brilho_text = font.render("Brilho:", True, 'white')
             display.blit(brilho_text, (430, 500))
@@ -199,9 +224,10 @@ while running:
                 game_state = 'menu'
 
         case 'playing':
+            pygame.mixer_music.stop()
             if lifes_left == 0:
                 game_state = 'game_over'
-
+                som_gover.play()
             else:
                 display.blit(ingame_background, (0, 0))
 
@@ -280,6 +306,7 @@ while running:
 
                     # Logica do hit no invader
                     for fire in player_fire:
+                        
                         invader_hitted = pygame.sprite.spritecollide(fire, invader_group, True, pygame.sprite.collide_mask)
                         # special_invader_hitted = pygame.sprite.spritecollide(fire, special_invader_group, True)
                         if invader_hitted:
@@ -287,6 +314,11 @@ while running:
                                 score += invader.reward
                                 explosion = Explosion(invader.rect.center)
                                 explosion_group.add(explosion)
+
+                                som_invader_morto.play()
+                                
+                                
+
                             # for special_invader in special_invader_hitted:
                             #     score += special_invader.reward
                             #     explosion = Explosion(special_invader.rect.center)
@@ -329,6 +361,7 @@ while running:
                         lifes_left -= 1     
 
     if game_state == 'game_over':
+        
         # Pinta no fundo a tela de fim de jogo.
         display.blit(game_over_background, (0, 0))
 

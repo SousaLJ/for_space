@@ -1,4 +1,5 @@
 import pygame
+from pygame import mixer
 from dropdown import *
 from button import Button
 from slider import *
@@ -48,6 +49,18 @@ volume_music = 50
 volume_effects = 50
 brightness = 50
 fps = 60  # Definido inicialmente para 60Hz
+
+#carregando musicas e efeitos sonoros
+mixer.music.load('audios\menu.wav')
+som_invader_morto = mixer.Sound('audios\sounds_invaderkilled.wav')
+som_ship_exp = mixer.Sound('audios\sounds_shipexplosion.wav')
+som_shoot = mixer.Sound('audios\sounds_shoot.wav')
+som_gover = mixer.Sound('audios\game_over.wav')
+
+mixer.music.set_volume(0.5)
+som_invader_morto.set_volume(0.5)
+som_ship_exp.set_volume(0.5)
+som_shoot.set_volume(0.5)
 
 #dropdown de seleção para a taxa de atualização	
 dropdown_options = ['30 hz', '60 hz', '120 hz', '144 hz']

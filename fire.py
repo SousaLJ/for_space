@@ -2,6 +2,7 @@ from pygame.sprite import Sprite
 from utils import surface_load
 from os.path import join
 from config import ALTURA_TELA
+from config import som_shoot
 import pygame
 
 
@@ -11,6 +12,7 @@ class Fire(Sprite):
     self.image = surface_load(join("images", "fire.png"), True, (45, 45))
     self.rect = self.image.get_rect(center = pos)
     self.speed = speed
+    som_shoot.play()
     
   def update(self):
     self.rect.y -= self.speed

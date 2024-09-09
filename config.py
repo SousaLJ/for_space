@@ -41,7 +41,7 @@ back_to_menu_game_over_button = Button('back_to_menu_button.png', 350, 310, 1)
 # Definir os sliders e botões no início do código
 musica_slider = Slider(650, 215, 300, 0, 100, 50)
 efeitos_slider = Slider(650, 315, 300, 0, 100, 50)
-brilho_slider = Slider(650, 535, 300, 0, 100, 50)
+brilho_slider = Slider(650, 515, 300, 0, 100, 50)
 
 # Inicializar valores padrão
 volume_music = 50

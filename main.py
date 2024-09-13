@@ -166,6 +166,7 @@ while running:
                 pygame.display.set_caption("Space Invaders - FPS: 240")
             
         case 'ps_options':
+            # pause screen options
             display.blit(options_background, (0, 0))
             tocar_musica()
             #opções de audio
@@ -243,10 +244,11 @@ while running:
                 if pause_screen:
                     invader_group.draw(display)
                     player_sprite.draw(display)
+                    player_fire.draw(display)
                     invader_fire.draw(display)
                     special_invader_group.draw(display)
                     explosion_group.draw(display)
-
+                    
                     if ps_play_button.draw(display):
                         pause_screen = False
 
@@ -295,7 +297,6 @@ while running:
                         
                         for ship in player_sprite:
                             ship_collision = pygame.sprite.collide_rect(obstacle, ship)
-
                         for fire in player_fire:
                             if pygame.sprite.collide_rect(obstacle, fire):
                                 fire.kill()

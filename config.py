@@ -73,9 +73,9 @@ ps_back_to_menu_button = Button('back_to_menu_button.png', 515, 400, 0.8)
 ps_exit_game = Button('exit_game_button.png', 520, 500, 0.8)
 
 player_sprite = pygame.sprite.Group()
+player_fire = pygame.sprite.Group()
 invader_group = pygame.sprite.Group()
 invader_fire = pygame.sprite.Group()
-player_fire = pygame.sprite.Group()
 special_invader_group = pygame.sprite.GroupSingle()
 explosion_group = pygame.sprite.Group()
 

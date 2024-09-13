@@ -107,6 +107,20 @@ while running:
             tocar_musica()
             display.blit(score_board_background, (0, 0))
 
+            '''with open("scoreboard.txt", 'a') as arquivo:  # Modo 'a' adiciona ao final do arquivo
+                arquivo.write(score + '\n')'''
+
+            with open('scoreboard.txt', 'r') as arquivo:  # Modo 'a' adiciona ao final do arquivo
+                lista_argumentos = [linha.strip() for linha in arquivo.readlines()] # Lista que armazena o conteudo do arquivo
+                numero_argumentos = len(lista_argumentos)  # Conta o número de linhas/argumentos
+
+            print(lista_argumentos)
+
+            for i in range(numero_argumentos):
+                points_surface = font.render(f'{lista_argumentos[i]}', False, 'white')
+                points_rect = points_surface.get_rect(topleft = ((785), (340+(i*50))))
+                display.blit(points_surface, points_rect)
+
             if back_to_menu_button.draw(display):
                 game_state = 'menu'
             

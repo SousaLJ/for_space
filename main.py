@@ -34,7 +34,9 @@ def collisions():
             explosion_group.add(Explosion(invader.rect.center))
         som_invader_morto.play()
 
-    pygame.sprite.groupcollide(player_fire, special_invader_group, True, True, pygame.sprite.collide_rect)
+    if pygame.sprite.groupcollide(player_fire, special_invader_group, True, True, pygame.sprite.collide_rect):
+        explosion_group.add(Explosion(special_invader.rect.center))
+        score += special_invader.reward
 
     pygame.sprite.groupcollide(obstacle_group, player_fire, True, True)
     pygame.sprite.groupcollide(obstacle_group, invader_fire, True, True, pygame.sprite.collide_rect)
@@ -277,6 +279,8 @@ while running:
                 game_state = 'menu'
 
         case 'playing':
+            if not invader_group:
+                game_state = 'game_over'
             pygame.mixer_music.stop()
             if lifes_left == 0:
                 game_state = 'game_over'

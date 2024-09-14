@@ -16,8 +16,8 @@ ALTURA_TELA = 720
 display = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA), pygame.SCALED | pygame.RESIZABLE)
 pygame.display.set_caption("for_space")
 pygame.display.set_icon(pygame.image.load(join("images", "logo.png")))
-rows = 5
-cols = 13
+rows = 4
+cols = 12
 
 # Telas
 menu_background = pygame.image.load(join('images', 'background_menu_atualizado.png'))
@@ -78,6 +78,8 @@ invader_group = pygame.sprite.Group()
 invader_fire = pygame.sprite.Group()
 special_invader_group = pygame.sprite.GroupSingle()
 explosion_group = pygame.sprite.Group()
+
+obstacle_group = pygame.sprite.Group()
 
 # Eventos
 INVADERFIRE = pygame.USEREVENT + 1

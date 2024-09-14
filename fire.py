@@ -28,6 +28,7 @@ class InvaderFire(Sprite):
         self.image = pygame.transform.rotate(self.image, 180)  # Rotaciona a imagem em 180 graus
         self.rect = self.image.get_rect(center=pos)
         self.speed = speed
+        self.reward = 0
 
     def update(self):
        self.rect.y -= self.speed

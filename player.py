@@ -6,7 +6,7 @@ from config import *
 from fire import Fire
 
 def create_player():
-  return Player((ALTURA_TELA / 2, LARGURA_TELA / 2), player_sprite)
+  return Player((ALTURA_TELA-80, LARGURA_TELA / 2), player_sprite)
   
 class Player(Sprite):
   def __init__(self, pos, groups):

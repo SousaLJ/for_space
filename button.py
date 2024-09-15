@@ -2,7 +2,7 @@ import pygame
 from os.path import join
 
 class Button():
-    def __init__(self, nome_arquivo, x, y, scale=1):
+    def __init__(self, nome_arquivo, x, y, scale=1.0):
         self.image = pygame.image.load(join('images', 'buttons', nome_arquivo)).convert_alpha()
         width = self.image.get_width()
         height = self.image.get_height()

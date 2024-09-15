@@ -58,8 +58,9 @@ class Player(Sprite):
       self.rect.top = 0
       
     # fire
-    if (keys[pygame.K_SPACE] or mouse[0]) and self.can_shoot:
+    if (keys[pygame.K_SPACE]) and self.can_shoot:
       Fire(self.rect.midtop, 10, player_fire)
+      som_shoot.play()
       self.can_shoot = False
       self.check_shoot_cooldown = pygame.time.get_ticks()
       

@@ -14,6 +14,7 @@ pygame.init()
 mixer.init()
 
 score = 0
+nivel = 1
 registrou = False
 
 fps = 60
@@ -25,10 +26,16 @@ def display_score():
     score_rect = score_surface.get_rect(topleft = (10, -10))
     display.blit(score_surface, score_rect)
 
+def display_level_atual(nivel):
+    level_surface = font.render(f'Level: {nivel}', False, 'white')
+    level_rect = level_surface.get_rect(center=(LARGURA_TELA/2, ALTURA_TELA/2))
+    display.blit(level_surface, level_rect)
+
 def collisions():
     global score, lifes_left
     invader_hitted = pygame.sprite.groupcollide(invader_group, player_fire, True, True, pygame.sprite.collide_mask)
     if invader_hitted:
+        invader_group.empty()
         for invader in invader_hitted:
             score += invader.reward
             explosion_group.add(Explosion(invader.rect.center))
@@ -45,14 +52,15 @@ def collisions():
                     sprite1.kill()
                     sprite2.kill()
                     break
-    # pygame.sprite.groupcollide(obstacle_group, player_fire, True, True, pygame.sprite.collide_mask)
+    pygame.sprite.groupcollide(obstacle_group, player_fire, True, True, pygame.sprite.collide_mask)
     pygame.sprite.groupcollide(obstacle_group, invader_fire, True, True)
 
     for fire in invader_fire:
         if pygame.sprite.spritecollide(fire, player_sprite, False, pygame.sprite.collide_mask):
             explosion_group.add(Explosion(fire.rect.center))
             fire.kill()
-            lifes_left -= 1
+            som_ship_exp.play()
+            lifes_left -= 5
 
         if pygame.sprite.spritecollide(fire, player_fire, True, pygame.sprite.collide_rect):
             explosion_group.add(Explosion(fire.rect.center))
@@ -60,27 +68,35 @@ def collisions():
             fire.kill()
 
 def update_and_draw():
-    special_invader_group.update()
-    special_invader_group.draw(display)
+    global game_state
+    if game_state != 'transition':
+        special_invader_group.update()
+        special_invader_group.draw(display)
 
-    invader_group.update()
-    invader_group.draw(display)
+        invader_group.update()
+        invader_group.draw(display)
 
-    invader_fire.update()
-    invader_fire.draw(display)
-    
-    player_sprite.update()
-    player_sprite.draw(display)
+        invader_fire.update()
+        invader_fire.draw(display)
+        
+        player_sprite.update()
+        player_sprite.draw(display)
 
-    player_fire.update()
-    # print(player_fire.sprites())
-    player_fire.draw(display)
+        player_fire.update()
+        # print(player_fire.sprites())
+        player_fire.draw(display)
 
-    explosion_group.update()
-    explosion_group.draw(display)
-    
-    obstacle_group.update()
-    obstacle_group.draw(display)
+        explosion_group.update()
+        explosion_group.draw(display)
+        
+        obstacle_group.update()
+        obstacle_group.draw(display)
+    else:    
+        player_sprite.draw(display)
+        obstacle_group.draw(display)
+        explosion_group.empty()
+        player_fire.empty()
+        invader_fire.empty()
 
 def pause_menu():
     invader_group.draw(display)
@@ -98,6 +114,7 @@ def pause_menu():
         global game_state
         game_state = 'ps_options'
     if ps_back_to_menu_button.draw(display):
+        global nivel
         reset_game()
         game_state = 'menu'
     if ps_exit_game.draw(display):
@@ -105,22 +122,38 @@ def pause_menu():
         exit()
 
 def reset_game():
-    global score, lifes_left, pause_screen, registrou
-    registrou = False
-    score = 0
-    lifes_left = 5
-    pause_screen = False
+    global score, lifes_left, pause_screen, registrou, nivel
+    if game_state in ('game_over', 'menu'):
+        registrou = False
+        score = 0
+        lifes_left = 5
+        nivel = 1
+        pause_screen = False
+        obstacle_group.empty()
+        create_obstacles()
+
+        player_sprite.empty()
+        create_player()
+    if obstacle_group:
+        if nivel < 10:
+            for obstacle in obstacle_group:
+                if obstacle.rect.right < 10 + 25 * nivel:
+                    obstacle.kill()
+                
+                if obstacle.rect.left > LARGURA_TELA - 25 - 25 * nivel:
+                    obstacle.kill()
+        else:
+            obstacle_group.empty()
     
+ 
+
     invader_fire.empty()
     invader_group.empty()
-    create_invaders()
+    create_invaders(nivel)
 
-    player_sprite.empty()
+    special_invader_group.empty()
+
     player_fire.empty()
-    create_player()
-    
-    obstacle_group.empty()
-    create_obstacles()
 
 def options():
     display.blit(options_background, (0, 0))
@@ -179,7 +212,7 @@ def registrar_score():
 create_obstacles()
 
 #Invaders
-create_invaders()
+create_invaders(nivel)
 
 #Player
 player = create_player()
@@ -223,7 +256,7 @@ while running:
                 player.cooldown = 100
 
             if event.type == INVADERFIRE and not pause_screen:
-                invaders_fire()
+                invaders_fire(-(8+nivel))
 
             if event.type == SPECIALINVADER and not special_invader_group:
                 special_invader = SpecialInvader(random.choice([0, 1]))
@@ -231,6 +264,7 @@ while running:
 
     match game_state:
         case 'menu':
+            reset_game()
             tocar_musica()
             
             display.blit(menu_background, (0,0))
@@ -242,6 +276,13 @@ while running:
                 game_state = 'options'
 
             elif play_button.draw(display):
+                display.blit(ingame_background, (0,0))
+                display_score()
+                display_level_atual(nivel)
+                update_and_draw()
+                pygame.display.update()
+
+                pygame.time.delay(1500)
                 game_state = 'playing'
 
             elif credits_button.draw(display):
@@ -281,6 +322,10 @@ while running:
                 game_state = 'playing'
                 pause_screen = 'false'
 
+            if back_to_menu_button.draw(display):
+                game_state = 'menu'
+                pause_screen = 'false'
+
         case 'credits':
             display.blit(credits_background, (0, 0))
 
@@ -289,9 +334,20 @@ while running:
 
         case 'playing':
             if not invader_group:
-                game_state = 'game_over'
+                nivel += 1
+                display.blit(ingame_background, (0, 0))
+                display_level_atual(nivel)
+                game_state = 'transition'
+                update_and_draw()
+                display_score()
+                pygame.display.update()
+                
+                pygame.time.delay(1500)
+                game_state = 'playing'
+                reset_game()
+                
             pygame.mixer_music.stop()
-            if lifes_left == 0:
+            if lifes_left <= 0:
                 game_state = 'game_over'
                 som_gover.play()
             else:

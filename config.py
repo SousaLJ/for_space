@@ -51,11 +51,11 @@ brightness = 50
 fps = 60  # Definido inicialmente para 60Hz
 
 #carregando musicas e efeitos sonoros
-mixer.music.load('audios\menu.wav')
-som_invader_morto = mixer.Sound('audios\sounds_invaderkilled.wav')
-som_ship_exp = mixer.Sound('audios\sounds_shipexplosion.wav')
-som_shoot = mixer.Sound('audios\sounds_shoot.wav')
-som_gover = mixer.Sound('audios\game_over.wav')
+mixer.music.load('audios\\menu.wav')
+som_invader_morto = mixer.Sound('audios\\sounds_invaderkilled.wav')
+som_ship_exp = mixer.Sound('audios\\sounds_shipexplosion.wav')
+som_shoot = mixer.Sound('audios\\sounds_shoot.wav')
+som_gover = mixer.Sound('audios\\game_over.wav')
 
 mixer.music.set_volume(0.5)
 som_invader_morto.set_volume(0.5)

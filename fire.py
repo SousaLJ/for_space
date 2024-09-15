@@ -16,7 +16,7 @@ class Fire(Sprite):
     
   def update(self):
     self.rect.y -= self.speed
-    if self.rect.top >= ALTURA_TELA:
+    if self.rect.top <= 0:
       self.kill()
       
 

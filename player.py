@@ -13,7 +13,7 @@ class Player(Sprite):
     super().__init__(groups)
     self.image = surface_load(join("images", "nave.png"), True, (80, 80))
     self.rect = self.image.get_rect(center = pos)
-    self.speed = 4
+    self.speed = 6
     
     # cooldown
     self.can_shoot = True

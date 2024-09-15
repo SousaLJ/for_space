@@ -26,7 +26,7 @@ def check_invader_position():
 def invaders_fire():
     if invader_group.sprites():
         random_invader = random.choice(invader_group.sprites())
-        fire = InvaderFire(random_invader.rect.center, -2)
+        fire = InvaderFire(random_invader.rect.center, -9)
         invader_fire.add(fire)
 
 class Invaders(pygame.sprite.Sprite):

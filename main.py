@@ -27,19 +27,26 @@ def display_score():
 
 def collisions():
     global score, lifes_left
-    invader_hitted = pygame.sprite.groupcollide(invader_group,player_fire, True, True, pygame.sprite.collide_mask)
+    invader_hitted = pygame.sprite.groupcollide(invader_group, player_fire, True, True, pygame.sprite.collide_mask)
     if invader_hitted:
         for invader in invader_hitted:
             score += invader.reward
             explosion_group.add(Explosion(invader.rect.center))
         som_invader_morto.play()
 
-    if pygame.sprite.groupcollide(player_fire, special_invader_group, True, True, pygame.sprite.collide_rect):
+    if pygame.sprite.groupcollide(player_fire, special_invader_group, True, True):
         explosion_group.add(Explosion(special_invader.rect.center))
         score += special_invader.reward
 
-    pygame.sprite.groupcollide(obstacle_group, player_fire, True, True)
-    pygame.sprite.groupcollide(obstacle_group, invader_fire, True, True, pygame.sprite.collide_rect)
+    for sprite1 in player_fire:
+        for sprite2 in obstacle_group:
+            if pygame.sprite.collide_rect(sprite1, sprite2):
+                if pygame.sprite.collide_mask(sprite1, sprite2):
+                    sprite1.kill()
+                    sprite2.kill()
+                    break
+    # pygame.sprite.groupcollide(obstacle_group, player_fire, True, True, pygame.sprite.collide_mask)
+    pygame.sprite.groupcollide(obstacle_group, invader_fire, True, True)
 
     for fire in invader_fire:
         if pygame.sprite.spritecollide(fire, player_sprite, False, pygame.sprite.collide_mask):
@@ -49,6 +56,7 @@ def collisions():
 
         if pygame.sprite.spritecollide(fire, player_fire, True, pygame.sprite.collide_rect):
             explosion_group.add(Explosion(fire.rect.center))
+            som_invader_morto.play()
             fire.kill()
 
 def update_and_draw():
@@ -65,6 +73,7 @@ def update_and_draw():
     player_sprite.draw(display)
 
     player_fire.update()
+    # print(player_fire.sprites())
     player_fire.draw(display)
 
     explosion_group.update()
@@ -216,7 +225,7 @@ while running:
             if event.type == INVADERFIRE and not pause_screen:
                 invaders_fire()
 
-            if event.type == SPECIALINVADER:
+            if event.type == SPECIALINVADER and not special_invader_group:
                 special_invader = SpecialInvader(random.choice([0, 1]))
                 special_invader_group.add(special_invader)
 

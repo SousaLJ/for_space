@@ -33,26 +33,27 @@ def display_level_atual(nivel):
 
 def collisions():
     global score, lifes_left
-    invader_hitted = pygame.sprite.groupcollide(invader_group, player_fire, True, True, pygame.sprite.collide_mask)
-    if invader_hitted:
-        invader_group.empty()
-        for invader in invader_hitted:
-            score += invader.reward
-            explosion_group.add(Explosion(invader.rect.center))
-        som_invader_morto.play()
+    if player_fire:
+        invader_hitted = pygame.sprite.groupcollide(invader_group, player_fire, True, True, pygame.sprite.collide_mask)
+        if invader_hitted:
+            # invader_group.empty()
+            for invader in invader_hitted:
+                score += invader.reward
+                explosion_group.add(Explosion(invader.rect.center))
+            som_invader_morto.play()
 
-    if pygame.sprite.groupcollide(player_fire, special_invader_group, True, True):
-        explosion_group.add(Explosion(special_invader.rect.center))
-        score += special_invader.reward
+        if pygame.sprite.groupcollide(player_fire, special_invader_group, True, True):
+            explosion_group.add(Explosion(special_invader.rect.center))
+            score += special_invader.reward
 
-    for sprite1 in player_fire:
-        for sprite2 in obstacle_group:
-            if pygame.sprite.collide_rect(sprite1, sprite2):
-                if pygame.sprite.collide_mask(sprite1, sprite2):
-                    sprite1.kill()
-                    sprite2.kill()
-                    break
-    pygame.sprite.groupcollide(obstacle_group, player_fire, True, True, pygame.sprite.collide_mask)
+        for sprite1 in player_fire:
+            for sprite2 in obstacle_group:
+                if pygame.sprite.collide_rect(sprite1, sprite2):
+                    if pygame.sprite.collide_mask(sprite1, sprite2):
+                        sprite1.kill()
+                        sprite2.kill()
+                        break
+    # pygame.sprite.groupcollide(obstacle_group, player_fire, True, True, pygame.sprite.collide_mask)
     pygame.sprite.groupcollide(obstacle_group, invader_fire, True, True)
 
     for fire in invader_fire:
@@ -60,7 +61,7 @@ def collisions():
             explosion_group.add(Explosion(fire.rect.center))
             fire.kill()
             som_ship_exp.play()
-            lifes_left -= 5
+            lifes_left -= 1
 
         if pygame.sprite.spritecollide(fire, player_fire, True, pygame.sprite.collide_rect):
             explosion_group.add(Explosion(fire.rect.center))

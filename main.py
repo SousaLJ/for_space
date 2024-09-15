@@ -209,6 +209,37 @@ def registrar_score():
         arquivo.write(f'{score}' + '\n')
     return True
 
+def show_names_scores(lista_argumentos, numero_argumentos):
+    names = [] # Armazena os nomes.
+    scores = [] # Armazena os pontos.
+    
+    # Separa os nomes dos pontos.
+    for index in range(numero_argumentos):
+        if index % 2 == 0:
+            names.append(lista_argumentos[index])
+        else:
+            scores.append(lista_argumentos[index])
+
+    scores_values = [int(score) for score in scores] # Lista com os valores inteiros dos scores.
+    highest_scores = [] # Armazena os maiores pontos.
+    highest_names = [] # Armazena os nomes que fizeram os maiores pontos.
+
+    # Exibe os nomes e os pontos, de acordo com as maiores pontuações.
+    for score_index in range(len(scores)):
+        if score_index <= 6:
+            max_score = max(scores_values)
+            index_max_score = scores_values.index(max_score)
+            highest_scores.append(max_score)
+            highest_names.append(names[index_max_score])
+            scores_values.remove(max_score)
+            names.remove(names[index_max_score])
+            points_surface = font.render(f'{highest_scores[score_index]}', False, 'white')
+            points_rect = points_surface.get_rect(topleft = ((745), (340+(score_index*50))))
+            names_surface = font.render(f'{highest_names[score_index]}', False, 'white')
+            names_rect = names_surface.get_rect(topleft = ((428), (340+(score_index*50))))
+            display.blit(points_surface, points_rect)
+            display.blit(names_surface, names_rect)
+
 #Obstacle
 create_obstacles()
 
@@ -297,16 +328,10 @@ while running:
                 lista_argumentos = [linha.strip() for linha in arquivo.readlines()] # Lista que armazena o conteudo do arquivo
                 numero_argumentos = len(lista_argumentos)  # Conta o número de linhas/argumentos
 
-            print(lista_argumentos)
-
-            for i in range(numero_argumentos):
-                points_surface = font.render(f'{lista_argumentos[i]}', False, 'white')
-                points_rect = points_surface.get_rect(topleft = ((785), (340+(i*50))))
-                display.blit(points_surface, points_rect)
+            show_names_scores(lista_argumentos, numero_argumentos)
 
             if back_to_menu_button.draw(display):
-                game_state = 'menu'
-            
+                game_state = 'menu'      
 
         case 'options':
             display.blit(options_background, (0, 0))
@@ -386,6 +411,7 @@ while running:
                 
             # Verifica se o botão de mostrar o scoreboard foi pressionado
             elif scoreboard_game_over_button.draw(display):
+                reset_game()
                 game_state = 'scoreboard'
             
             # # Verifica se o botão de sair do jogo foi pressionado

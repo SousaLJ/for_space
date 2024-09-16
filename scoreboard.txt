@@ -12,3 +12,7 @@ Mariana
 60000000
 Kratos
 10000000000
+joao
+4300
+JOAO
+5400

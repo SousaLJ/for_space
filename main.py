@@ -92,6 +92,7 @@ def update_and_draw():
         
         obstacle_group.update()
         obstacle_group.draw(display)
+        
     else:    
         player_sprite.draw(display)
         obstacle_group.draw(display)
@@ -375,7 +376,6 @@ while running:
             with open('scoreboard.txt', 'r') as arquivo:  # Modo 'a' adiciona ao final do arquivo
                 lista_argumentos = [linha.strip() for linha in arquivo.readlines()] # Lista que armazena o conteudo do arquivo
                 numero_argumentos = len(lista_argumentos)  # Conta o número de linhas/argumentos
-
             show_names_scores(lista_argumentos, numero_argumentos)
 
             if back_to_menu_button.draw(display):

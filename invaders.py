@@ -74,11 +74,11 @@ class SpecialInvader(pygame.sprite.Sprite):
 
         if side == 0:
             x = LARGURA_TELA + 30
-            self.speed = -3
+            self.speed = -5
 
         else:
             x = -30
-            self.speed = 3
+            self.speed = 5
         
         self.rect = self.image.get_rect(topleft=(x, 50))
 

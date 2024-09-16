@@ -206,7 +206,8 @@ def options():
 
 def registrar_score():
     with open("scoreboard.txt", 'a') as arquivo:  # Modo 'a' adiciona ao final do arquivo
-        arquivo.write(f'{score}' + '\n')
+        arquivo.write(f'{user_text}')      # username
+        arquivo.write(f'{score}' + '\n')          # score
     return True
 
 def show_names_scores(lista_argumentos, numero_argumentos):

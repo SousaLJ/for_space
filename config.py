@@ -40,27 +40,27 @@ exit_game_game_over_button = Button('exit_game_button.png', 675, 390, 1)
 back_to_menu_game_over_button = Button('back_to_menu_button.png', 350, 310, 1)
 
 # Definir os sliders e botões no início do código
-musica_slider = Slider(650, 215, 300, 0, 100, 50)
-efeitos_slider = Slider(650, 315, 300, 0, 100, 50)
+musica_slider = Slider(650, 215, 300, 0, 100, 5)
+efeitos_slider = Slider(650, 315, 300, 0, 100, 5)
 brilho_slider = Slider(650, 515, 300, 0, 100, 50)
 
 # Inicializar valores padrão
-volume_music = 50
-volume_effects = 50
+volume_music = 5
+volume_effects = 5
 brightness = 50
 fps = 60  # Definido inicialmente para 60Hz
 
 #carregando musicas e efeitos sonoros
-mixer.music.load('audios\menu.wav')
-som_invader_morto = mixer.Sound('audios\sounds_invaderkilled.wav')
-som_ship_exp = mixer.Sound('audios\sounds_shipexplosion.wav')
-som_shoot = mixer.Sound('audios\sounds_shoot.wav')
-som_gover = mixer.Sound('audios\game_over.wav')
+mixer.music.load(join('audios', 'menu.wav'))
+som_invader_morto = mixer.Sound(join('audios', 'sounds_invaderkilled.wav'))
+som_ship_exp = mixer.Sound(join('audios', 'sounds_shipexplosion.wav'))
+som_shoot = mixer.Sound(join('audios', 'sounds_shoot.wav'))
+som_gover = mixer.Sound(join('audios', 'game_over.wav'))
 
-mixer.music.set_volume(0.5)
-som_invader_morto.set_volume(0.5)
-som_ship_exp.set_volume(0.5)
-som_shoot.set_volume(0.5)
+mixer.music.set_volume(0.05)
+som_invader_morto.set_volume(0.05)
+som_ship_exp.set_volume(0.05)
+som_shoot.set_volume(0.05)
 
 #dropdown de seleção para a taxa de atualização	
 dropdown_options = ['30 hz', '60 hz', '120 hz', '144 hz']
@@ -81,6 +81,12 @@ explosion_group = pygame.sprite.Group()
 
 obstacle_group = pygame.sprite.Group()
 
+# pre-menu (username)
+start_typing = False
+blink_time = 0
+show_text = False
+user_text = ''
+
 # Eventos
 INVADERFIRE = pygame.USEREVENT + 1
 pygame.time.set_timer(INVADERFIRE, 1000) # frequencia de tiros dos invaders em millisegundos 
@@ -93,7 +99,9 @@ clock = pygame.time.Clock()
 pause_screen = False
 
 pygame.font.init()
-font = pygame.font.Font(join('font', 'pixeled.ttf'), 20)
+
+# font comentada pois fazemos uma nova variavel font na main.py
+# font = pygame.font.Font(join('font', 'pixeled.ttf'), 20)
 
 # Configurações das vidas do jogador.
 lifes_left = 5

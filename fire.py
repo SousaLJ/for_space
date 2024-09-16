@@ -9,7 +9,7 @@ import pygame
 class Fire(Sprite):
   def __init__(self, pos, speed, groups) -> None:
     super().__init__(groups)
-    self.image = surface_load(join("images", "fire.png"), True, (45, 45))
+    self.image = surface_load(join("images", "fire.png"), True, (30, 30))
     self.rect = self.image.get_rect(center = pos)
     self.speed = speed
     som_shoot.play()

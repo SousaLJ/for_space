@@ -18,8 +18,8 @@ registrou = False
 
 fps = 60
 dropdown.index_selecionado = 1
-font_path = 'font\\pixeled.ttf'
-font = pygame.font.Font(font_path, 16)
+font = pygame.font.Font(join('font', 'pixeled.ttf'), 16)
+
 def display_score():
     score_surface = font.render(f'Score: {score}', False, 'white')
     score_rect = score_surface.get_rect(topleft = (10, -10))
@@ -178,7 +178,7 @@ player = create_player()
 running = True
 clock = pygame.time.Clock()
 
-game_state = 'menu'
+game_state = 'player_identify'
 pause_screen = False
 
 mixer.music.play(-1)
@@ -198,6 +198,21 @@ while running:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+        
+        # logica username
+        if event.type == pygame.KEYDOWN and game_state == 'player_identify':
+            start_typing = True
+            # digitar na tela
+            if event.key == pygame.K_BACKSPACE:
+                user_text = user_text[:-1]
+            else:
+                user_text += event.unicode
+            
+            # se apertar ENTER, vai pro menu e salva o username    
+            if event.key == pygame.K_RETURN:
+                user_text = text_rect
+                game_state = 'menu'
+        
         
         if game_state == 'playing':
             # esc in-game pausa o jogo e so despausa ao apertar esc novamente
@@ -221,6 +236,39 @@ while running:
                 special_invader_group.add(special_invader)
 
     match game_state:
+        case 'player_identify':
+            display.fill("#1E1647")
+            
+            # blit digite seu nome
+            instruction_surface = pygame.font.Font(join('font', 'pixeled.ttf'), 25).render('DIGITE SEU USERNAME:', True, '#FFFF00')
+            instruction_rect = instruction_surface.get_rect()
+            instruction_rect.center = (LARGURA_TELA // 2, 80)
+            
+            display.blit(instruction_surface, instruction_rect)
+            
+            if start_typing:
+                enter_name_surface = font.render('APERTE \'ENTER\' PARA ENTRAR NO JOGO', True, WHITE)
+                enter_name_rect = enter_name_surface.get_rect()
+                enter_name_rect.center = (LARGURA_TELA // 2, ALTURA_TELA - 30)
+                
+                # Atualize o tempo de piscar
+                blink_time += clock.get_time()
+                if blink_time >= 500:  # Alterna a cada 500ms (0.5 segundos)
+                    show_text = not show_text
+                    blink_time = 0
+                    
+                if show_text:
+                    display.blit(enter_name_surface, enter_name_rect)
+            
+            text_surface = font.render(user_text, True, WHITE)
+            
+            # retangulo para centralizar o texto na tela
+            text_rect = text_surface.get_rect()
+            text_rect.center = (LARGURA_TELA // 2, ALTURA_TELA // 2)
+            
+            display.blit(text_surface, text_rect)
+
+            
         case 'menu':
             tocar_musica()
             

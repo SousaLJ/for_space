@@ -17,7 +17,7 @@ display = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA), pygame.SCALED | p
 pygame.display.set_caption("for_space")
 pygame.display.set_icon(pygame.image.load(join("images", "logo.png")))
 rows = 4
-cols = 12
+cols = 10
 
 # Telas
 menu_background = pygame.image.load(join('images', 'background_menu_atualizado.png'))

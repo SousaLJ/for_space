@@ -14,6 +14,7 @@ pygame.init()
 mixer.init()
 
 score = 0
+nivel = 1
 registrou = False
 
 fps = 60
@@ -25,53 +26,78 @@ def display_score():
     score_rect = score_surface.get_rect(topleft = (10, -10))
     display.blit(score_surface, score_rect)
 
+def display_level_atual(nivel):
+    level_surface = font.render(f'Level: {nivel}', False, 'white')
+    level_rect = level_surface.get_rect(center=(LARGURA_TELA/2, ALTURA_TELA/2))
+    display.blit(level_surface, level_rect)
+
 def collisions():
     global score, lifes_left
-    invader_hitted = pygame.sprite.groupcollide(invader_group,player_fire, True, True, pygame.sprite.collide_mask)
-    if invader_hitted:
-        for invader in invader_hitted:
-            score += invader.reward
-            explosion_group.add(Explosion(invader.rect.center))
-        som_invader_morto.play()
+    if player_fire:
+        invader_hitted = pygame.sprite.groupcollide(invader_group, player_fire, True, True, pygame.sprite.collide_mask)
+        if invader_hitted:
+            # invader_group.empty()
+            for invader in invader_hitted:
+                score += invader.reward
+                explosion_group.add(Explosion(invader.rect.center))
+            som_invader_morto.play()
 
-    if pygame.sprite.groupcollide(player_fire, special_invader_group, True, True, pygame.sprite.collide_rect):
-        explosion_group.add(Explosion(special_invader.rect.center))
-        score += special_invader.reward
+        if pygame.sprite.groupcollide(player_fire, special_invader_group, True, True):
+            explosion_group.add(Explosion(special_invader.rect.center))
+            score += special_invader.reward
 
-    pygame.sprite.groupcollide(obstacle_group, player_fire, True, True)
-    pygame.sprite.groupcollide(obstacle_group, invader_fire, True, True, pygame.sprite.collide_rect)
+        for sprite1 in player_fire:
+            for sprite2 in obstacle_group:
+                if pygame.sprite.collide_rect(sprite1, sprite2):
+                    if pygame.sprite.collide_mask(sprite1, sprite2):
+                        sprite1.kill()
+                        sprite2.kill()
+                        break
+    # pygame.sprite.groupcollide(obstacle_group, player_fire, True, True, pygame.sprite.collide_mask)
+    pygame.sprite.groupcollide(obstacle_group, invader_fire, True, True)
 
     for fire in invader_fire:
         if pygame.sprite.spritecollide(fire, player_sprite, False, pygame.sprite.collide_mask):
             explosion_group.add(Explosion(fire.rect.center))
             fire.kill()
+            som_ship_exp.play()
             lifes_left -= 1
 
         if pygame.sprite.spritecollide(fire, player_fire, True, pygame.sprite.collide_rect):
             explosion_group.add(Explosion(fire.rect.center))
+            som_invader_morto.play()
             fire.kill()
 
 def update_and_draw():
-    special_invader_group.update()
-    special_invader_group.draw(display)
+    global game_state
+    if game_state != 'transition':
+        special_invader_group.update()
+        special_invader_group.draw(display)
 
-    invader_group.update()
-    invader_group.draw(display)
+        invader_group.update()
+        invader_group.draw(display)
 
-    invader_fire.update()
-    invader_fire.draw(display)
-    
-    player_sprite.update()
-    player_sprite.draw(display)
+        invader_fire.update()
+        invader_fire.draw(display)
+        
+        player_sprite.update()
+        player_sprite.draw(display)
 
-    player_fire.update()
-    player_fire.draw(display)
+        player_fire.update()
+        # print(player_fire.sprites())
+        player_fire.draw(display)
 
-    explosion_group.update()
-    explosion_group.draw(display)
-    
-    obstacle_group.update()
-    obstacle_group.draw(display)
+        explosion_group.update()
+        explosion_group.draw(display)
+        
+        obstacle_group.update()
+        obstacle_group.draw(display)
+    else:    
+        player_sprite.draw(display)
+        obstacle_group.draw(display)
+        explosion_group.empty()
+        player_fire.empty()
+        invader_fire.empty()
 
 def pause_menu():
     invader_group.draw(display)
@@ -89,6 +115,7 @@ def pause_menu():
         global game_state
         game_state = 'ps_options'
     if ps_back_to_menu_button.draw(display):
+        global nivel
         reset_game()
         game_state = 'menu'
     if ps_exit_game.draw(display):
@@ -96,22 +123,38 @@ def pause_menu():
         exit()
 
 def reset_game():
-    global score, lifes_left, pause_screen, registrou
-    registrou = False
-    score = 0
-    lifes_left = 5
-    pause_screen = False
+    global score, lifes_left, pause_screen, registrou, nivel
+    if game_state in ('game_over', 'menu'):
+        registrou = False
+        score = 0
+        lifes_left = 5
+        nivel = 1
+        pause_screen = False
+        obstacle_group.empty()
+        create_obstacles()
+
+        player_sprite.empty()
+        create_player()
+    if obstacle_group:
+        if nivel < 10:
+            for obstacle in obstacle_group:
+                if obstacle.rect.right < 10 + 25 * nivel:
+                    obstacle.kill()
+                
+                if obstacle.rect.left > LARGURA_TELA - 25 - 25 * nivel:
+                    obstacle.kill()
+        else:
+            obstacle_group.empty()
     
+ 
+
     invader_fire.empty()
     invader_group.empty()
-    create_invaders()
+    create_invaders(nivel)
 
-    player_sprite.empty()
+    special_invader_group.empty()
+
     player_fire.empty()
-    create_player()
-    
-    obstacle_group.empty()
-    create_obstacles()
 
 def options():
     display.blit(options_background, (0, 0))
@@ -166,11 +209,42 @@ def registrar_score():
         arquivo.write(f'{score}' + '\n')
     return True
 
+def show_names_scores(lista_argumentos, numero_argumentos):
+    names = [] # Armazena os nomes.
+    scores = [] # Armazena os pontos.
+    
+    # Separa os nomes dos pontos.
+    for index in range(numero_argumentos):
+        if index % 2 == 0:
+            names.append(lista_argumentos[index])
+        else:
+            scores.append(lista_argumentos[index])
+
+    scores_values = [int(score) for score in scores] # Lista com os valores inteiros dos scores.
+    highest_scores = [] # Armazena os maiores pontos.
+    highest_names = [] # Armazena os nomes que fizeram os maiores pontos.
+
+    # Exibe os nomes e os pontos, de acordo com as maiores pontuações.
+    for score_index in range(len(scores)):
+        if score_index <= 6:
+            max_score = max(scores_values)
+            index_max_score = scores_values.index(max_score)
+            highest_scores.append(max_score)
+            highest_names.append(names[index_max_score])
+            scores_values.remove(max_score)
+            names.remove(names[index_max_score])
+            points_surface = font.render(f'{highest_scores[score_index]}', False, 'white')
+            points_rect = points_surface.get_rect(topleft = ((745), (340+(score_index*50))))
+            names_surface = font.render(f'{highest_names[score_index]}', False, 'white')
+            names_rect = names_surface.get_rect(topleft = ((428), (340+(score_index*50))))
+            display.blit(points_surface, points_rect)
+            display.blit(names_surface, names_rect)
+
 #Obstacle
 create_obstacles()
 
 #Invaders
-create_invaders()
+create_invaders(nivel)
 
 #Player
 player = create_player()
@@ -229,9 +303,9 @@ while running:
                 player.cooldown = 100
 
             if event.type == INVADERFIRE and not pause_screen:
-                invaders_fire()
+                invaders_fire(-(8+nivel))
 
-            if event.type == SPECIALINVADER:
+            if event.type == SPECIALINVADER and not special_invader_group:
                 special_invader = SpecialInvader(random.choice([0, 1]))
                 special_invader_group.add(special_invader)
 
@@ -270,6 +344,7 @@ while running:
 
             
         case 'menu':
+            reset_game()
             tocar_musica()
             
             display.blit(menu_background, (0,0))
@@ -281,6 +356,13 @@ while running:
                 game_state = 'options'
 
             elif play_button.draw(display):
+                display.blit(ingame_background, (0,0))
+                display_score()
+                display_level_atual(nivel)
+                update_and_draw()
+                pygame.display.update()
+
+                pygame.time.delay(1500)
                 game_state = 'playing'
 
             elif credits_button.draw(display):
@@ -294,16 +376,10 @@ while running:
                 lista_argumentos = [linha.strip() for linha in arquivo.readlines()] # Lista que armazena o conteudo do arquivo
                 numero_argumentos = len(lista_argumentos)  # Conta o número de linhas/argumentos
 
-            print(lista_argumentos)
-
-            for i in range(numero_argumentos):
-                points_surface = font.render(f'{lista_argumentos[i]}', False, 'white')
-                points_rect = points_surface.get_rect(topleft = ((785), (340+(i*50))))
-                display.blit(points_surface, points_rect)
+            show_names_scores(lista_argumentos, numero_argumentos)
 
             if back_to_menu_button.draw(display):
-                game_state = 'menu'
-            
+                game_state = 'menu'      
 
         case 'options':
             display.blit(options_background, (0, 0))
@@ -320,6 +396,10 @@ while running:
                 game_state = 'playing'
                 pause_screen = 'false'
 
+            if back_to_menu_button.draw(display):
+                game_state = 'menu'
+                pause_screen = 'false'
+
         case 'credits':
             display.blit(credits_background, (0, 0))
 
@@ -328,9 +408,20 @@ while running:
 
         case 'playing':
             if not invader_group:
-                game_state = 'game_over'
+                nivel += 1
+                display.blit(ingame_background, (0, 0))
+                display_level_atual(nivel)
+                game_state = 'transition'
+                update_and_draw()
+                display_score()
+                pygame.display.update()
+                
+                pygame.time.delay(1500)
+                game_state = 'playing'
+                reset_game()
+                
             pygame.mixer_music.stop()
-            if lifes_left == 0:
+            if lifes_left <= 0:
                 game_state = 'game_over'
                 som_gover.play()
             else:
@@ -368,6 +459,7 @@ while running:
                 
             # Verifica se o botão de mostrar o scoreboard foi pressionado
             elif scoreboard_game_over_button.draw(display):
+                reset_game()
                 game_state = 'scoreboard'
             
             # # Verifica se o botão de sair do jogo foi pressionado

@@ -284,7 +284,6 @@ while running:
             
             # se apertar ENTER, vai pro menu e salva o username    
             if event.key == pygame.K_RETURN:
-                user_text = text_rect
                 game_state = 'menu'
         
         

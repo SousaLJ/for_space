@@ -139,7 +139,7 @@ def options():
     display.blit(brilho_text, (430, 500))
 
     brilho = brilho_slider.draw(display)
-
+  
     fps_text = font.render("Taxa de Atualizaçao:", True, 'white')
     display.blit(fps_text, (345, 400))  
 

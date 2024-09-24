@@ -66,21 +66,18 @@ class Invaders(pygame.sprite.Sprite):
         self.rect.x += self.direction
 
 class SpecialInvader(pygame.sprite.Sprite):
-    def __init__(self, side):
+    def __init__(self):
         super().__init__()
         self.image = pygame.image.load(join('images', 'frame1_invader1.png')).convert_alpha()
         
-        self.reward = 500
-
-        if side == 0:
-            x = LARGURA_TELA + 30
+        self.reward = random.choice(150, 200, 250)
+        screen_side = random.choice(LARGURA_TELA + 30, -30)
+        if screen_side > 0:
             self.speed = -5
-
         else:
-            x = -30
             self.speed = 5
         
-        self.rect = self.image.get_rect(topleft=(x, 50))
+        self.rect = self.image.get_rect(topleft=(screen_side, 50))
 
     def update(self):
         self.rect.x += self.speed

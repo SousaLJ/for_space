@@ -10,15 +10,20 @@ from fire import *
 from dropdown import *
 from obstacles import *
 
+# initialização do pygame (por isso, ao sair do loop do jogo, pygame.quit é necessario)
 pygame.init()
 mixer.init()
 
+# Algumas configurações iniciais, será necessário reescrever para um codigo
+# baseado em OOP
 score = 0
 nivel = 1
 registrou = False
 
 fps = 60
 dropdown.index_selecionado = 1
+
+# Inicializa uma font para posteriormente ser utilizada como surface
 font = pygame.font.Font(join('font', 'pixeled.ttf'), 16)
 
 def display_score():
@@ -32,6 +37,11 @@ def display_level_atual(nivel):
     display.blit(level_surface, level_rect)
 
 def collisions():
+    # utilizar global não é recomendado, pode causar um bug inesperado
+    # a ideia é transformar tudo para OOP
+    '''
+    função que será utilizada para TODAS as colisões que ocorrem no jogo
+    '''
     global score, lifes_left
     if player_fire:
         invader_hitted = pygame.sprite.groupcollide(invader_group, player_fire, True, True, pygame.sprite.collide_mask)
@@ -307,7 +317,7 @@ while running:
                 invaders_fire(-(8+nivel))
 
             if event.type == SPECIALINVADER and not special_invader_group:
-                special_invader = SpecialInvader(random.choice([0, 1]))
+                special_invader = SpecialInvader()
                 special_invader_group.add(special_invader)
 
     match game_state:

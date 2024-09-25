@@ -70,8 +70,8 @@ class SpecialInvader(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load(join('images', 'frame1_invader1.png')).convert_alpha()
         
-        self.reward = random.choice(150, 200, 250)
-        screen_side = random.choice(LARGURA_TELA + 30, -30)
+        self.reward = random.choice([150, 200, 250])
+        screen_side = random.choice([LARGURA_TELA + 30, -30])
         if screen_side > 0:
             self.speed = -5
         else:

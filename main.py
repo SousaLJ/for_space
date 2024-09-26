@@ -432,6 +432,7 @@ while running:
         case 'playing':
             if not invader_group:
                 nivel += 1
+                lifes_left += 1 if lifes_left < 5 else 0
                 display.blit(ingame_background, (0, 0))
                 display_level_atual(nivel)
                 game_state = 'transition'

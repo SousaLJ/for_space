@@ -6,7 +6,7 @@ from fire import Fire
 
 def create_invaders(nivel):
     max_cols = 12
-    max_rows = 8
+    max_rows = 6
     current_n_of_cols = cols + nivel
     current_n_of_rows = rows + nivel // 3
 
@@ -70,7 +70,7 @@ class Invaders(pygame.sprite.Sprite):
         self.image = self.frames[self.animation_index]
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
-        self.direction = 2
+        self.direction = 2 + nivel // 10
 
     def animation_state(self):
         self.animation_index += 0.02
@@ -88,7 +88,7 @@ class Invaders(pygame.sprite.Sprite):
             if self.health_left > 0:
                 pygame.draw.rect(display, GREEN, (self.rect.x, (self.rect.bottom + 10), int(self.rect.width * (self.health_left / self.health_start)), 5))
 
-            self.rect.x += self.direction // 10
+            self.rect.x += self.direction
 
 
 class SpecialInvader(pygame.sprite.Sprite):

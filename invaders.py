@@ -5,11 +5,14 @@ from os.path import join
 from fire import Fire
 
 def create_invaders(nivel):
+    max_cols = 12
+    max_rows = 8
+    current_n_of_cols = cols + nivel
+    current_n_of_rows = rows + nivel // 3
+
     if nivel % 10 != 0:
-        for row in range(rows + nivel // 3):
-            max_cols = 12
-            current_n_of_cols = cols + nivel
-            for item in range(current_n_of_cols if current_n_of_cols < 12 else max_cols):
+        for row in range(current_n_of_rows if current_n_of_rows < max_rows else max_rows):
+            for item in range(current_n_of_cols if current_n_of_cols < max_cols else max_cols):
                 invader = Invaders(100 + item * 65, 100 + row * 70, nivel)
                 invader_group.add(invader)
         return

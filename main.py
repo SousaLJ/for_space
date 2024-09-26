@@ -43,26 +43,39 @@ def collisions():
     função que será utilizada para TODAS as colisões que ocorrem no jogo
     '''
     global score, lifes_left
-    if player_fire:
+    if player_fire and (nivel % 10 == 0):
+        invader_hitted = pygame.sprite.groupcollide(invader_group, player_fire, False, True, pygame.sprite.collide_mask)
+        if invader_hitted:
+            for invader in invader_hitted:
+                if invader.health_left <= 1:
+                    explosion_group.add(Explosion(invader.rect.center))
+                    invader.health_left -= 1
+                    invader_group.empty()
+                    break
+                invader.health_left -= 1
+                explosion_group.add(Explosion(invader.rect.center))
+                som_invader_morto.play()              
+
+    else:
         invader_hitted = pygame.sprite.groupcollide(invader_group, player_fire, True, True, pygame.sprite.collide_mask)
         if invader_hitted:
-            # invader_group.empty()
+            invader_group.empty()
             for invader in invader_hitted:
                 score += invader.reward
                 explosion_group.add(Explosion(invader.rect.center))
             som_invader_morto.play()
 
-        if pygame.sprite.groupcollide(player_fire, special_invader_group, True, True):
-            explosion_group.add(Explosion(special_invader.rect.center))
-            score += special_invader.reward
+    if pygame.sprite.groupcollide(player_fire, special_invader_group, True, True):
+        explosion_group.add(Explosion(special_invader.rect.center))
+        score += special_invader.reward
 
-        for sprite1 in player_fire:
-            for sprite2 in obstacle_group:
-                if pygame.sprite.collide_rect(sprite1, sprite2):
-                    if pygame.sprite.collide_mask(sprite1, sprite2):
-                        sprite1.kill()
-                        sprite2.kill()
-                        break
+    for sprite1 in player_fire:
+        for sprite2 in obstacle_group:
+            if pygame.sprite.collide_rect(sprite1, sprite2):
+                if pygame.sprite.collide_mask(sprite1, sprite2):
+                    sprite1.kill()
+                    sprite2.kill()
+                    break
     # pygame.sprite.groupcollide(obstacle_group, player_fire, True, True, pygame.sprite.collide_mask)
     pygame.sprite.groupcollide(obstacle_group, invader_fire, True, True)
 

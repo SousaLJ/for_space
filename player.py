@@ -13,12 +13,12 @@ class Player(Sprite):
     super().__init__(groups)
     self.image = surface_load(join("images", "nave.png"), True, (80, 80))
     self.rect = self.image.get_rect(center = pos)
-    self.speed = 6
+    self.speed = 8
     
     # cooldown
     self.can_shoot = True
     self.check_shoot_cooldown = 0
-    self.cooldown = 500
+    self.cooldown = 350
 
   # timer para o tiro, baseado no cooldown
   def fire_timer(self):

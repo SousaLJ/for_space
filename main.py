@@ -59,7 +59,7 @@ def collisions():
     else:
         invader_hitted = pygame.sprite.groupcollide(invader_group, player_fire, True, True, pygame.sprite.collide_mask)
         if invader_hitted:
-            invader_group.empty()
+            # invader_group.empty()
             for invader in invader_hitted:
                 score += invader.reward
                 explosion_group.add(Explosion(invader.rect.center))
@@ -159,16 +159,16 @@ def reset_game():
 
         player_sprite.empty()
         create_player()
-    if obstacle_group:
-        if nivel < 10:
-            for obstacle in obstacle_group:
-                if obstacle.rect.right < 10 + 25 * nivel:
-                    obstacle.kill()
+    # if obstacle_group:
+    #     if nivel < 10:
+    #         for obstacle in obstacle_group:
+    #             if obstacle.rect.right < 10 + 25 * nivel:
+    #                 obstacle.kill()
                 
-                if obstacle.rect.left > LARGURA_TELA - 25 - 25 * nivel:
-                    obstacle.kill()
-        else:
-            obstacle_group.empty()
+    #             if obstacle.rect.left > LARGURA_TELA - 25 - 25 * nivel:
+    #                 obstacle.kill()
+    #     else:
+    #         obstacle_group.empty()
     
  
 
@@ -419,9 +419,9 @@ while running:
                 game_state = 'playing'
                 pause_screen = 'false'
 
-            if back_to_menu_button.draw(display):
-                game_state = 'menu'
-                pause_screen = 'false'
+            # if back_to_menu_button.draw(display):
+            #     game_state = 'menu'
+            #     pause_screen = 'false'
 
         case 'credits':
             display.blit(credits_background, (0, 0))

@@ -16,7 +16,7 @@ def create_invaders(nivel):
                 invader = Invaders(100 + item * 65, 100 + row * 70, nivel)
                 invader_group.add(invader)
         return
-    boss = Invaders(LARGURA_TELA // 2, ALTURA_TELA // 5, 10)
+    boss = Invaders(LARGURA_TELA // 2, ALTURA_TELA // 5, nivel)
     invader_group.add(boss)
 
 def check_invader_position():
@@ -99,11 +99,11 @@ class SpecialInvader(pygame.sprite.Sprite):
         self.reward = random.choice([150, 200, 250])
         screen_side = random.choice([LARGURA_TELA + 30, -30])
         if screen_side > 0:
-            self.speed = -5
+            self.speed = -4
         else:
-            self.speed = 5
+            self.speed = 4
         
-        self.rect = self.image.get_rect(topleft=(screen_side, 50))
+        self.rect = self.image.get_rect(topleft=(screen_side, 30))
 
     def update(self):
         self.rect.x += self.speed

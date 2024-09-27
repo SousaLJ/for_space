@@ -23,7 +23,7 @@ cols = 4
 menu_background = pygame.image.load(join('images', 'background_menu_atualizado.png'))
 ingame_background = pygame.image.load(join('images', 'universo.png'))
 credits_background = pygame.image.load(join('images', 'credits_bg.png'))
-game_over_background = pygame.image.load(join('images', 'game_over_screen_sem_botoes.png'))
+game_over_background = pygame.image.load(join('images', 'game_over_screen_2_2.png'))
 score_board_background = pygame.image.load(join('images', 'score_board.png'))
 options_background = pygame.image.load(join('images', 'options_bg.png'))
 
@@ -34,10 +34,10 @@ options_button = Button('options_button.png', 849.4, 487.1, 1)
 credits_button = Button('credits_button.png', 1033, 402.7, 1)
 back_to_menu_button = Button('back_to_menu_button.png', 20, 20, 1)
 back_to_game_button = Button('back_to_game.png', 20, 20, 1)
-play_again_game_over_button = Button('play_again_button.png', 430, 390, 1)
-scoreboard_game_over_button = Button('scoreboard_button.png', 740, 310, 1)
-exit_game_game_over_button = Button('exit_game_button.png', 675, 390, 1)
-back_to_menu_game_over_button = Button('back_to_menu_button.png', 350, 310, 1)
+play_again_game_over_button = Button('play_again_button.png', 400, 390, 1)
+scoreboard_game_over_button = Button('scoreboard_button.png', 780, 310, 1)
+exit_game_game_over_button = Button('exit_game_button.png', 705, 390, 1)
+back_to_menu_game_over_button = Button('back_to_menu_button.png', 310, 310, 1)
 
 # Definir os sliders e botões no início do código
 musica_slider = Slider(650, 215, 300, 0, 100, 5)

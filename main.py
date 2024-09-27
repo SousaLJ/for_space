@@ -73,9 +73,14 @@ def collisions():
         for sprite2 in obstacle_group:
             if pygame.sprite.collide_rect(sprite1, sprite2):
                 if pygame.sprite.collide_mask(sprite1, sprite2):
+                    player.cooldown = 10
                     sprite1.kill()
                     sprite2.kill()
                     break
+            
+            else:
+                player.cooldown = 350   
+
     # pygame.sprite.groupcollide(obstacle_group, player_fire, True, True, pygame.sprite.collide_mask)
     pygame.sprite.groupcollide(obstacle_group, invader_fire, True, True)
 
@@ -147,7 +152,7 @@ def pause_menu():
         exit()
 
 def reset_game():
-    global score, lifes_left, pause_screen, registrou, nivel
+    global score, lifes_left, pause_screen, registrou, nivel, player
     if game_state in ('game_over', 'menu'):
         registrou = False
         score = 0
@@ -158,7 +163,7 @@ def reset_game():
         create_obstacles()
 
         player_sprite.empty()
-        create_player()
+        player = create_player()
     # if obstacle_group:
     #     if nivel < 10:
     #         for obstacle in obstacle_group:

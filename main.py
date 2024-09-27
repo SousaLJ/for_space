@@ -60,7 +60,7 @@ def collisions():
     else:
         invader_hitted = pygame.sprite.groupcollide(invader_group, player_fire, True, True, pygame.sprite.collide_mask)
         if invader_hitted:
-            invader_group.empty()
+            #invader_group.empty()
             for invader in invader_hitted:
                 score += invader.reward
                 explosion_group.add(Explosion(invader.rect.center))

@@ -39,7 +39,7 @@ class Player(Sprite):
     self.direcao[0] = (int(keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])) or (int(keys[pygame.K_d]) - int(keys[pygame.K_a]))
 
     # Semelhante à linha anterior, porém é necessário que o valor retornado tenha o sinal trocado, a fim de que a movimentação não fique invertida.
-    self.direcao[1] = -((int(keys[pygame.K_UP]) - int(keys[pygame.K_DOWN])) or int(keys[pygame.K_w]) - int(keys[pygame.K_s]))
+    #self.direcao[1] = -((int(keys[pygame.K_UP]) - int(keys[pygame.K_DOWN])) or int(keys[pygame.K_w]) - int(keys[pygame.K_s]))
   
     self.rect.center += self.direcao * self.speed      # dt em fase de testes ainda
     

@@ -6,6 +6,7 @@ import pygame
 
 
 class Fire(Sprite):
+  # alteramos aqui tambem
   def __init__(self, pos, speed, groups) -> None:
     super().__init__(groups)
     self.image = surface_load(join("images", "fire.png"), True, (30, 30))

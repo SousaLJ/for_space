@@ -18,7 +18,11 @@ mixer.init()
 # baseado em OOP
 score = 0
 nivel = 1
-registrou = False
+registrou = False   
+
+# Clean code
+# PEP8
+# OOP 
 
 fps = 60
 dropdown.index_selecionado = 1
